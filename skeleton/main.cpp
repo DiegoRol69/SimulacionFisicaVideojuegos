@@ -11,8 +11,6 @@
 
 #include <iostream>
 
-
-
 using namespace physx;
 
 PxDefaultAllocator		gAllocator;
@@ -58,10 +56,12 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	Vector3 pos = {0,0,0};
+	Vector3 pos = {0,100,0};
 	Vector3 vel = {-4,3,0};
+	double damping = 0.999;
+	Vector3 acel = {0, -9.8, 0};
 
-	particle = new Particle(pos, vel);
+	particle = new Particle(pos, vel, damping, acel);
 }
 
 
