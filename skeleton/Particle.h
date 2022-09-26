@@ -5,7 +5,8 @@
 class Particle
 {
 public:
-	Particle(Vector3 pos, Vector3 vel, double damp, Vector3 acel);
+	Particle() {};
+	Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel);
 	~Particle();
 
 	void integrate(double t);
@@ -17,5 +18,9 @@ private:
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 	double damping;
+	double masa;
+
+protected:
+	void setProyectile(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m,  physx::PxShape * shape);
 };
 

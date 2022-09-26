@@ -8,6 +8,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
+#include "Proyectile.h"
 
 #include <iostream>
 
@@ -27,7 +28,8 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 
-Particle* particle = NULL;
+std::vector<Proyectile*> proyectiles;
+std::vector<Particle*> particles;
 
 ContactReportCallback gContactReportCallback;
 
@@ -56,12 +58,15 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	Vector3 pos = {0,100,0};
-	Vector3 vel = {-4,3,0};
+	Vector3 pos = GetCamera()->getTransform().p;
+	Vector3 vel = {0,0,0};
 	double damping = 0.999;
-	Vector3 acel = {0, -9.8, 0};
+	Vector3 acel = {0, 0, 0};
+	Vector3 ofset = {-100, 0, -100};
 
-	particle = new Particle(pos, vel, damping, acel);
+	particles.push_back(new Particle(pos + ofset, vel, damping, acel));
+
+
 }
 
 
@@ -75,7 +80,13 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	particle->integrate(t);
+	for (int i = 0; i < proyectiles.size(); i++) {
+		proyectiles[i]->integrate(t);
+	}
+
+	for (int i = 0; i < particles.size(); i++) {
+		particles[i]->integrate(t);
+	}
 }
 
 // Function to clean data
@@ -95,7 +106,13 @@ void cleanupPhysics(bool interactive)
 	
 	gFoundation->release();
 
-	delete particle;
+	for (int i = 0; i < proyectiles.size(); i++) {
+		delete proyectiles[i];
+	}
+
+	for (int i = 0; i < particles.size(); i++) {
+		delete particles[i];
+	}
 }
 
 // Function called when a key is pressed
@@ -107,10 +124,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
-	case ' ':
-	{
+	case 'B':
+		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
 		break;
-	}
+	case 'C':
+		proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
+		break;
+	case 'F':
+		proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
+		break;
 	default:
 		break;
 	}
