@@ -7,8 +7,7 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
-#include "Particle.h"
-#include "Proyectile.h"
+#include "ParticleSys.h"
 
 #include <iostream>
 
@@ -28,8 +27,7 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 
-std::vector<Proyectile*> proyectiles;
-std::vector<Particle*> particles;
+ParticleSys *sysParticle = NULL;
 
 ContactReportCallback gContactReportCallback;
 
@@ -58,15 +56,15 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	Vector3 pos = GetCamera()->getTransform().p;
-	Vector3 vel = {0,0,0};
-	double damping = 0.999;
-	Vector3 acel = {0, 0, 0};
-	Vector3 ofset = {-100, 0, -100};
+	sysParticle = new ParticleSys(2);
 
-	particles.push_back(new Particle(pos + ofset, vel, damping, acel));
+	//Vector3 pos = GetCamera()->getTransform().p;
+	//Vector3 vel = {0,0,0};
+	//double damping = 0.999;
+	//Vector3 acel = {0, 0, 0};
+	//Vector3 ofset = {-100, 0, -100};
 
-
+	//particles.push_back(new Particle(pos + ofset, vel, damping, acel));
 }
 
 
@@ -80,13 +78,15 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	for (int i = 0; i < proyectiles.size(); i++) {
-		proyectiles[i]->integrate(t);
-	}
+	sysParticle->update(t);
 
-	for (int i = 0; i < particles.size(); i++) {
-		particles[i]->integrate(t);
-	}
+	//for (int i = 0; i < proyectiles.size(); i++) {
+	//	proyectiles[i]->integrate(t);
+	//}
+
+	//for (int i = 0; i < particles.size(); i++) {
+	//	//particles[i]->integrate(t);
+	//}
 }
 
 // Function to clean data
@@ -106,13 +106,13 @@ void cleanupPhysics(bool interactive)
 	
 	gFoundation->release();
 
-	for (int i = 0; i < proyectiles.size(); i++) {
-		delete proyectiles[i];
-	}
+	//for (int i = 0; i < proyectiles.size(); i++) {
+	//	delete proyectiles[i];
+	//}
 
-	for (int i = 0; i < particles.size(); i++) {
-		delete particles[i];
-	}
+	//for (int i = 0; i < particles.size(); i++) {
+	//	delete particles[i];
+	//}
 }
 
 // Function called when a key is pressed
@@ -124,15 +124,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
-	case 'B':
-		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
-		break;
-	case 'C':
-		proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
-		break;
-	case 'F':
-		proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
-		break;
+	//case 'B':
+	//	proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
+	//	break;
+	//case 'C':
+	//	proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
+	//	break;
+	//case 'F':
+	//	proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
+	//	break;
 	default:
 		break;
 	}

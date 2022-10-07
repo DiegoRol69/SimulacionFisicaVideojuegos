@@ -6,10 +6,11 @@ class Particle
 {
 public:
 	Particle() {};
-	Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel);
+	Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double tiempoVida_);
 	~Particle();
 
 	void integrate(double t);
+	bool viva();
 
 private:
 
@@ -19,6 +20,7 @@ private:
 	RenderItem* renderItem;
 	double damping;
 	double masa;
+	double tiempoVida;
 
 protected:
 	void setProyectile(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m,  physx::PxShape * shape);
