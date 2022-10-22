@@ -11,8 +11,7 @@ class ParticleSys
 
 	std::list<Particle*> particles;
 	std::list<ParticleGenerator*> particleGen;
-	std::vector<FireWork*> _firework_pool;
-	ParticleGenerator* _firework_gen;
+	std::vector<FireWork*> firework_pool;
 
 	Vector3 max_pos;
 	Vector3 min_pos;
@@ -26,7 +25,6 @@ public:
 	void addGen(TipoGen tipo);
 
 	void shootFirework(int type);
-	void onParticleDeath(Particle * particle);
 	void generateFireworkSystem();
 };
 

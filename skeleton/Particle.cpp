@@ -2,66 +2,94 @@
 
 Particle::Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double tiempoVida_)
 {
-	pose = physx::PxTransform(pos.x, pos.y, pos.z);
-	vel = v;
-	damping = damp;
-	aceleration = acel;
-	tiempoVida = tiempoVida_;
+	properties.pose = physx::PxTransform(pos.x, pos.y, pos.z);
+	properties.vel = v;
+	properties.damping = damp;
+	properties.aceleration = acel;
+	properties.tiempoVida = tiempoVida_;
 
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(0.5)), &pose, {1, 1, 0, 1});
+	properties.renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(0.5)), &properties.pose, {1, 1, 0, 1});
 
 }
 
-void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape)
+void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape, double tiempoVida_, bool prefab)
 {
-	pose = physx::PxTransform(pos.x, pos.y, pos.z);
-	vel = v;
-	damping = damp;
-	aceleration = acel;
-	masa = m;
+	properties.pose = physx::PxTransform(pos.x, pos.y, pos.z);
+	properties.vel = v;
+	properties.damping = damp;
+	properties.aceleration = acel;
+	properties.masa = m;
+	properties.shape = shape;
+	properties.tiempoVida = tiempoVida_;
 
-	renderItem = new RenderItem(shape, &pose, { 1, 0, 0, 1 });
+	if (prefab) {
+		properties.renderItem = new RenderItem(shape, &properties.pose, { 1, 0, 0, 1 });
+	}
 
-	//RegisterRenderItem(renderItem);
+	else properties.renderItem = nullptr;
+
+	//RegisterRenderItem(properties.renderItem);
 }
 
 Particle::~Particle()
 {
-	DeregisterRenderItem(renderItem);
+	DeregisterRenderItem(properties.renderItem);
 }
 
 void Particle::integrate(double t)
 {
-	pose.p = pose.p + (vel * t);
-	vel = vel * (pow(damping, t)) + aceleration * t;
+	properties.pose.p = properties.pose.p + (properties.vel * t);
+	properties.vel = properties.vel * (pow(properties.damping, t)) + properties.aceleration * t;
 
-	tiempoVida -= t;
+	properties.tiempoVida -= t;
 }
 
 bool Particle::viva()
 {
-	return tiempoVida > 0;
+	return properties.tiempoVida > 0;
 }
 
-Particle* Particle::clone() const
+Particle* Particle::clone()
 {
-
+	Particle* p = new Particle();
+	p->copyParticle(this);
+	return p;
 }
+
 
 void Particle::setTime(double time) {
-	tiempoVida = time;
+	properties.tiempoVida = time;
 }
 
 void Particle::setPos(Vector3 pos) {
-	pose = physx::PxTransform(pos.x, pos.y, pos.z);
+	properties.pose = physx::PxTransform(pos.x, pos.y, pos.z);
 }
 
-Vector3 Particle::getPos() {
-	return pose.p;
+void Particle::setVel(Vector3 vel)
+{
+	properties.vel = vel;
 }
 
-Vector3 Particle::getVel() {
-	return vel;
+void Particle::copyParticle(Particle* p)
+{
+	particleProperties pModel = p->getProperties();
+
+	properties.pose = physx::PxTransform(pModel.pose.p.x, pModel.pose.p.y, pModel.pose.p.z);
+	properties.vel = pModel.vel;
+	properties.damping = pModel.damping;
+	properties.aceleration = pModel.aceleration;
+	properties.masa = pModel.masa;
+	properties.shape = pModel.shape;
+	properties.tiempoVida = pModel.tiempoVida;
+
+	properties.renderItem = new RenderItem(pModel.shape, &properties.pose, { 1, 1, 0, 1 });
 }
+
+particleProperties Particle::getProperties()
+{
+	return properties;
+}
+
+
 
 

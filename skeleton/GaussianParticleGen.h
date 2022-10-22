@@ -1,5 +1,6 @@
 #pragma once
 #include "ParticleGenerator.h"
+#include "FireWork.h"
 
 class GaussianParticleGen : public ParticleGenerator
 {

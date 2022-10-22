@@ -58,6 +58,8 @@ void initPhysics(bool interactive)
 
 	sysParticle = new ParticleSys();
 
+	sysParticle->generateFireworkSystem();
+
 	//Vector3 pos = GetCamera()->getTransform().p;
 	//Vector3 vel = {0,0,0};
 	//double damping = 0.999;
@@ -125,12 +127,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'G':
 		sysParticle->addGen(Gaussian);
 		break;
-
 	case 'U':
 		sysParticle->addGen(Uniform);
 		break;
 	case 'F':
-		
+		sysParticle->shootFirework(0);
+		break;
+	case 'E':
+		sysParticle->shootFirework(1);
 		break; 
 	/*case 'B':
 		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));

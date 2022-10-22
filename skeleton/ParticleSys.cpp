@@ -28,6 +28,14 @@ void ParticleSys::update(double t)
 		(*i)->integrate(t);
 
 		if (!(*i)->viva()) {
+
+			auto fw = dynamic_cast<FireWork*>(*i);
+
+			if (fw != nullptr) {
+				auto explosion =  fw->explode();
+				particles.insert(particles.end(), explosion.begin(), explosion.end());
+			}
+
 			delete (*i);
 			i = particles.erase(i);
 		}
@@ -42,17 +50,49 @@ void ParticleSys::addGen(TipoGen tipo)
 {
 
 	Camera* camera = GetCamera();
+	Particle* p = new Particle();
 
 	switch (tipo)
 	{
 	case Gaussian:
-		Particle* p;
-		p->setParticle(Vector3(15, 40, 0), camera->getDir() * (-10), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(10)));
+		p->setParticle(Vector3(15, 40, 0), camera->getDir() * (-10), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
 		particleGen.push_back(new GaussianParticleGen(p, 1, Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1));
+		//particleGen.push_back(new GaussianParticleGen(Vector3(15, 40, 0), camera->getDir() * (-10), 1,
+		//	Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1, 3));
 		break;
 	case Uniform:
 		particleGen.push_back(new UniformParticleGen(Vector3(0, 40, 0), Vector3(0,0,0), 10, 0.1, Vector3(10, 10, 10), Vector3(3, 3, 3)));
 		break;
 	}
+
+}
+
+void ParticleSys::shootFirework(int type)
+{
+	FireWork* fw = new FireWork();
+	fw->setFireWork(firework_pool[type]);
+	particles.push_back(fw);
+}
+
+void ParticleSys::generateFireworkSystem()
+{
+
+	Particle* p = new Particle();
+	FireWork* fw = new FireWork();
+
+	p->setParticle(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
+
+	shared_ptr <ParticleGenerator> gen(new GaussianParticleGen(p, 20, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1));
+	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -2, 0),
+		440, CreateShape(physx::PxSphereGeometry(0.5)), 3, 10, 5, gen);
+	firework_pool.push_back(fw);
+
+	fw = new FireWork();
+
+	shared_ptr <ParticleGenerator> gen2(new GaussianParticleGen(firework_pool[0], 20, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1));
+	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -2, 0),
+		440, CreateShape(physx::PxSphereGeometry(0.5)), 3, 10, 5, gen2);
+	firework_pool.push_back(fw);
+
 
 }
