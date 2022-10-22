@@ -12,7 +12,7 @@ Particle::Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double tie
 
 }
 
-void Particle::setProyectile(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape)
+void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape)
 {
 	pose = physx::PxTransform(pos.x, pos.y, pos.z);
 	vel = v;
@@ -22,7 +22,7 @@ void Particle::setProyectile(Vector3 pos, Vector3 v, double damp, Vector3 acel, 
 
 	renderItem = new RenderItem(shape, &pose, { 1, 0, 0, 1 });
 
-	RegisterRenderItem(renderItem);
+	//RegisterRenderItem(renderItem);
 }
 
 Particle::~Particle()
@@ -45,7 +45,23 @@ bool Particle::viva()
 
 Particle* Particle::clone() const
 {
-	return new Particle(pose.p, vel, damping, aceleration, masa, tiempoVida);
+
+}
+
+void Particle::setTime(double time) {
+	tiempoVida = time;
+}
+
+void Particle::setPos(Vector3 pos) {
+	pose = physx::PxTransform(pos.x, pos.y, pos.z);
+}
+
+Vector3 Particle::getPos() {
+	return pose.p;
+}
+
+Vector3 Particle::getVel() {
+	return vel;
 }
 
 

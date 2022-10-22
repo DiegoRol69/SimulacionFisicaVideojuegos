@@ -5,14 +5,22 @@
 class Particle
 {
 public:
+
 	Particle() {};
 	Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double tiempoVida_);
 	~Particle();
+	void setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape);
+
+	virtual Particle* clone() const;
+
+	Vector3 getPos();
+	Vector3 getVel();
 
 	void integrate(double t);
 	bool viva();
 
-	virtual Particle* clone () const;
+	void setTime(double time);
+	void setPos(Vector3 pos);
 
 private:
 
@@ -24,8 +32,5 @@ private:
 	double masa;
 	double tiempoVida;
 	Vector3 space;
-
-protected:
-	void setProyectile(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m,  physx::PxShape * shape);
 };
 

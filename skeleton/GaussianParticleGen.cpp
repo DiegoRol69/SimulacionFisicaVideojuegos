@@ -22,6 +22,26 @@ GaussianParticleGen::GaussianParticleGen(Vector3 pos, Vector3 vel,  int n, Vecto
 
 }
 
+GaussianParticleGen::GaussianParticleGen(Particle* p, int n, Vector3 dev_pos_, Vector3 dev_vel_, double _generation_probability_,
+    double dev_t_) {
+
+    particle = p;
+
+    num_particles = n;
+    dev_pos = dev_pos_;
+    dev_vel = dev_vel_;
+    _generation_probability = _generation_probability_;
+    dev_t = dev_t_;
+
+    px = std::normal_distribution<>(p->getPos().x, dev_pos.x);
+    py = std::normal_distribution<>(p->getPos().y, dev_pos.y);
+    pz = std::normal_distribution<>(p->getPos().z, dev_pos.z);
+
+    vx = std::normal_distribution<>(p->getVel().x, dev_vel.x);
+    vy = std::normal_distribution<>(p->getVel().y, dev_vel.y);
+    vz = std::normal_distribution<>(p->getVel().z, dev_vel.z);
+}
+
 std::list<Particle*> GaussianParticleGen::generateParticles()
 {
 
@@ -36,7 +56,10 @@ std::list<Particle*> GaussianParticleGen::generateParticles()
         vel_result = { float(vx(gen)), float(vy(gen)), float(vz(gen)) };
 
         if (generationDistr(gen) < _generation_probability) {
-            Particle* p = new Particle(pos_result, vel_result, 0.99, Vector3(0, -10, 0), t(gen));
+            //Particle* p = new Particle(pos_result, vel_result, 0.99, Vector3(0, -10, 0), t(gen));
+            Particle* p = particle->clone();
+            p->setPos(pos_result);
+            p->setTime(t(gen));
             particles.push_back(p);
         }
     }

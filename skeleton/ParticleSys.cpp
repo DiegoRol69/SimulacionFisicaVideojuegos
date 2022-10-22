@@ -46,8 +46,9 @@ void ParticleSys::addGen(TipoGen tipo)
 	switch (tipo)
 	{
 	case Gaussian:
-		particleGen.push_back(new GaussianParticleGen(Vector3(15, 40, 0), camera->getDir() * (-10), 1,
-			Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1, 3));
+		Particle* p;
+		p->setParticle(Vector3(15, 40, 0), camera->getDir() * (-10), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(10)));
+		particleGen.push_back(new GaussianParticleGen(p, 1, Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1));
 		break;
 	case Uniform:
 		particleGen.push_back(new UniformParticleGen(Vector3(0, 40, 0), Vector3(0,0,0), 10, 0.1, Vector3(10, 10, 10), Vector3(3, 3, 3)));

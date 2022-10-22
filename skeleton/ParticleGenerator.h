@@ -23,5 +23,10 @@ public:
 
 	virtual std::list<Particle*> generateParticles () = 0;
 
+	void setMeans(Vector3 mean_pos_, Vector3 mean_vel_) {
+		mean_pos_ = mean_pos_;
+		mean_vel = mean_vel_;
+	}
+
 };
 
