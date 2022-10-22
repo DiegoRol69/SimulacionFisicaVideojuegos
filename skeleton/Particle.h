@@ -5,12 +5,12 @@
 struct particleProperties {
 	Vector3 vel;
 	Vector3 aceleration;
-	physx::PxTransform pose;
-	RenderItem* renderItem;
 	double damping;
 	double masa;
 	double tiempoVida;
-	physx::PxShape* shape;
+	physx::PxShape* shape;	
+	physx::PxTransform pose;
+	RenderItem* renderItem;
 };
 
 class Particle
