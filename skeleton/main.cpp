@@ -56,7 +56,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	sysParticle = new ParticleSys(2);
+	sysParticle = new ParticleSys();
 
 	//Vector3 pos = GetCamera()->getTransform().p;
 	//Vector3 vel = {0,0,0};
@@ -122,17 +122,25 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	//case 'B': break;
-	//case ' ':	break;
-	//case 'B':
-	//	proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
-	//	break;
-	//case 'C':
-	//	proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
-	//	break;
-	//case 'F':
-	//	proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
-	//	break;
+	case 'G':
+		sysParticle->addGen(Gaussian);
+		break;
+
+	case 'U':
+		sysParticle->addGen(Uniform);
+		break;
+	case 'F':
+		
+		break; 
+	/*case 'B':
+		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
+		break;
+	case 'C':
+		proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
+		break;
+	case 'F':
+		proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
+		break;*/
 	default:
 		break;
 	}

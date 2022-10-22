@@ -8,9 +8,8 @@ Particle::Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double tie
 	aceleration = acel;
 	tiempoVida = tiempoVida_;
 
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(5)), &pose, {1, 1, 0, 1});
+	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(0.5)), &pose, {1, 1, 0, 1});
 
-	RegisterRenderItem(renderItem);
 }
 
 void Particle::setProyectile(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape)
@@ -42,6 +41,11 @@ void Particle::integrate(double t)
 bool Particle::viva()
 {
 	return tiempoVida > 0;
+}
+
+Particle* Particle::clone() const
+{
+	return new Particle(pose.p, vel, damping, aceleration, masa, tiempoVida);
 }
 
 

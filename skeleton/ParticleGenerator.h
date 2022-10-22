@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include "Particle.h"
+#include <random>
 
 class ParticleGenerator
 {
@@ -14,6 +15,9 @@ protected:
 	int num_particles;
 
 	Particle* _model;
+
+	std::random_device rd{};
+	std::mt19937 gen{ rd() };
 
 public:
 
