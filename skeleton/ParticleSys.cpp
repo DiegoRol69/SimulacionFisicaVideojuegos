@@ -89,7 +89,7 @@ void ParticleSys::generateFireworkSystem()
 	p->setParticle(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
 
 	shared_ptr <ParticleGenerator> gen(new CircleParticleGen(p, 20, 0.8, 20));
-	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -2, 0),
+	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -5, 0),
 		440, CreateShape(physx::PxSphereGeometry(0.5)), 3, 10, 5, gen);
 	firework_pool.push_back(fw);
 

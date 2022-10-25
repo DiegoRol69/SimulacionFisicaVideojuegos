@@ -24,7 +24,9 @@ void FireWork::setFireWork(FireWork *p)
 	properties.shape = pModel.shape;
 	properties.tiempoVida = pModel.tiempoVida;
 
-	properties.renderItem = new RenderItem(properties.shape, &properties.pose, { 1, 0, 0, 1 });
+	std::uniform_real_distribution<double> color(0, 1);
+
+	properties.renderItem = new RenderItem(properties.shape, &properties.pose, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
 }
 
 void FireWork::setFireWork(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, 

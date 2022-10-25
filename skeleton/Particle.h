@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderUtils.hpp"
 #include "core.hpp"
+#include <random>
 
 struct particleProperties {
 	Vector3 vel;
@@ -37,5 +38,7 @@ public:
 protected:
 	particleProperties properties;
 	Vector3 space;
+	std::random_device rd{};
+	std::mt19937 gen{ rd() };
 };
 

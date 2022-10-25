@@ -82,7 +82,9 @@ void Particle::copyParticle(Particle* p)
 	properties.shape = pModel.shape;
 	properties.tiempoVida = pModel.tiempoVida;
 
-	properties.renderItem = new RenderItem(pModel.shape, &properties.pose, { 1, 1, 0, 1 });
+	std::uniform_real_distribution<double> color(0, 1);
+
+	properties.renderItem = new RenderItem(properties.shape, &properties.pose, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
 }
 
 particleProperties Particle::getProperties()
