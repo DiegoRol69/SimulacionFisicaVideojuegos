@@ -4,7 +4,7 @@
 #include "ParticleGenerator.h"
 #include "FireWork.h"
 
-enum TipoGen {Gaussian, Uniform};
+enum TipoGen {Gaussian, Uniform, Circle};
 
 class ParticleSys
 {

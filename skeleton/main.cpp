@@ -136,6 +136,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'E':
 		sysParticle->shootFirework(1);
 		break; 
+	case 'C':
+		sysParticle->addGen(Circle);
+		break;
 	/*case 'B':
 		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
 		break;

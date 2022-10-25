@@ -61,15 +61,20 @@ void ParticleSys::addGen(TipoGen tipo)
 		p->setParticle(Vector3(0,0,0), Vector3(0,0,0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
 		gen = new GaussianParticleGen(p, 1, Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1);
 		gen->setMeans(Vector3(15, 40, 0), camera->getDir() * (-10));
-		particleGen.push_back(gen);
 		break;
 	case Uniform:
 		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
 		gen = new UniformParticleGen(p, 10, 0.1, Vector3(10, 10, 10), Vector3(3, 3, 3));
 		gen->setMeans(Vector3(0, 40, 0), Vector3(0, 0, 0));
-		particleGen.push_back(gen);
+		break;
+	case Circle:
+		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
+		gen = new CircleParticleGen(p, 10, 0.8, 20);
+		gen->setMeans(Vector3(0, 40, 0), Vector3(0, 0, 0));
 		break;
 	}
+
+	particleGen.push_back(gen);
 
 }
 
