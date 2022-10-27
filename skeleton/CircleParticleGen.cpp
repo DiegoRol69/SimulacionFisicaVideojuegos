@@ -1,16 +1,27 @@
 #include "CircleParticleGen.h"
 
-CircleParticleGen::CircleParticleGen(Particle* p, int n, double _generation_probability_, double radius_)
+CircleParticleGen::CircleParticleGen(Particle* p, int n, double _generation_probability_, double radius_, type tipo_)
 {
     _model = p;
     radius = radius_;
     num_particles = n;
     _generation_probability = _generation_probability_;
+    tipo = tipo_;
 }
 
 void CircleParticleGen::setPosCircle(double angle_) {
 
-    vel_result = { float(physx::PxCos(angle)*radius), float(0), float(physx::PxSin(angle)*radius) };
+    switch (tipo)
+    {
+    case FunteChocolate:
+        vel_result = { float(physx::PxCos(angle) * radius), float(0), float(physx::PxSin(angle) * radius) };
+        break;
+    case FunteAgua:
+        vel_result = { float(physx::PxCos(angle) * radius), float(20), float(physx::PxSin(angle) * radius) };
+        break;
+    default:
+        break;
+    }    
 }
 
 std::list<Particle*> CircleParticleGen::generateParticles()

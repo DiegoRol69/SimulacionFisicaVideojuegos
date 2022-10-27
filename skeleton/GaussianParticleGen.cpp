@@ -40,7 +40,6 @@ std::list<Particle*> GaussianParticleGen::generateParticles()
         vel_result = { float(vx(gen)), float(vy(gen)), float(vz(gen)) };
 
         if (generationDistr(gen) < _generation_probability) {
-            //Particle* p = new Particle(pos_result, vel_result, 0.99, Vector3(0, -10, 0), t(gen));
             FireWork* fw = dynamic_cast<FireWork*>(_model);
             if (fw != nullptr){
                 FireWork* p = new FireWork();

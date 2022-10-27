@@ -12,7 +12,8 @@ Particle::Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double tie
 
 }
 
-void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape, double tiempoVida_, bool prefab)
+void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape, 
+	double tiempoVida_, Vector3 center_, Vector3 maxRange_, bool prefab, bool compruebaRango_)
 {
 	properties.pose = physx::PxTransform(pos.x, pos.y, pos.z);
 	properties.vel = v;
@@ -21,6 +22,9 @@ void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, do
 	properties.masa = m;
 	properties.shape = shape;
 	properties.tiempoVida = tiempoVida_;
+	properties.center = center_;
+	properties.maxRange = maxRange_;
+	properties.compruebaRango = compruebaRango_;
 
 	if (prefab) {
 		properties.renderItem = new RenderItem(shape, &properties.pose, { 1, 0, 0, 1 });
@@ -46,7 +50,15 @@ void Particle::integrate(double t)
 
 bool Particle::viva()
 {
-	return properties.tiempoVida > 0;
+	bool inRange = true;
+
+	if (properties.compruebaRango) {
+		inRange = properties.pose.p.x < properties.center.x + properties.maxRange.x && properties.pose.p.x > properties.center.x - properties.maxRange.x &&
+			properties.pose.p.y < properties.center.y + properties.maxRange.y && properties.pose.p.y > properties.center.y - properties.maxRange.y &&
+			properties.pose.p.z < properties.center.z + properties.maxRange.z && properties.pose.p.z > properties.center.z - properties.maxRange.z;
+	}
+
+	return properties.tiempoVida > 0 && inRange;
 }
 
 Particle* Particle::clone()
@@ -81,6 +93,9 @@ void Particle::copyParticle(Particle* p)
 	properties.masa = pModel.masa;
 	properties.shape = pModel.shape;
 	properties.tiempoVida = pModel.tiempoVida;
+	properties.center = pModel.center;
+	properties.maxRange = pModel.maxRange;
+	properties.compruebaRango = pModel.compruebaRango;
 
 	std::uniform_real_distribution<double> color(0, 1);
 

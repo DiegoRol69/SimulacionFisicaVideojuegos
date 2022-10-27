@@ -49,7 +49,7 @@ void ParticleSys::update(double t)
 
 void ParticleSys::addGen(TipoGen tipo)
 {
-
+	srand(time(NULL));
 	Camera* camera = GetCamera();
 	Particle* p = new Particle();
 
@@ -58,18 +58,22 @@ void ParticleSys::addGen(TipoGen tipo)
 	switch (tipo)
 	{
 	case Gaussian:
-		p->setParticle(Vector3(0,0,0), Vector3(0,0,0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
+		p->setParticle(Vector3(0,0,0), Vector3(0,0,0), 0.8, Vector3(0, -9.8, 0), 440, 
+			CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(15, 40, 0), Vector3(20, 20, 20), false, true);
 		gen = new GaussianParticleGen(p, 1, Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1);
 		gen->setMeans(Vector3(15, 40, 0), camera->getDir() * (-10));
 		break;
 	case Uniform:
-		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
+		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 9.8, 0), 440, 
+			CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(0, 40, 0), Vector3(10, 15, 10), false, true);
 		gen = new UniformParticleGen(p, 10, 0.1, Vector3(10, 10, 10), Vector3(3, 3, 3));
 		gen->setMeans(Vector3(0, 40, 0), Vector3(0, 0, 0));
 		break;
 	case Circle:
-		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
-		gen = new CircleParticleGen(p, 10, 0.8, 20);
+		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, -9.8, 0), 440, 
+			CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(0, 40, 0), Vector3(50, 50, 50), false, true);
+		type randomType = static_cast<type>(rand()%ult);
+		gen = new CircleParticleGen(p, 10, 0.8, 20,  randomType);
 		gen->setMeans(Vector3(0, 40, 0), Vector3(0, 0, 0));
 		break;
 	}
@@ -91,9 +95,11 @@ void ParticleSys::generateFireworkSystem()
 	Particle* p = new Particle();
 	FireWork* fw = new FireWork();
 
-	p->setParticle(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, false);
+	p->setParticle(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(15, 40, 0), Vector3(1000, 1000, 1000),  false, false);
+	
+	type randomType = static_cast<type>(rand() % ult);
 
-	shared_ptr <ParticleGenerator> gen(new CircleParticleGen(p, 20, 0.8, 20));
+	shared_ptr <ParticleGenerator> gen(new CircleParticleGen(p, 20, 0.8, 20, randomType));
 	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -5, 0),
 		440, CreateShape(physx::PxSphereGeometry(0.5)), 3, 10, 5, gen);
 	firework_pool.push_back(fw);

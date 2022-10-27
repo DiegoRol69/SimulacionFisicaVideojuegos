@@ -23,6 +23,7 @@ void FireWork::setFireWork(FireWork *p)
 	properties.masa = pModel.masa;
 	properties.shape = pModel.shape;
 	properties.tiempoVida = pModel.tiempoVida;
+	properties.compruebaRango = pModel.compruebaRango;
 
 	std::uniform_real_distribution<double> color(0, 1);
 
