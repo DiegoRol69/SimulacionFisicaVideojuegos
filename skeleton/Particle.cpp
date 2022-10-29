@@ -1,12 +1,18 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double tiempoVida_)
+Particle::Particle(Vector3 pos, Vector3 v, double damp, double m, Vector3 acel, double tiempoVida_)
 {
 	properties.pose = physx::PxTransform(pos.x, pos.y, pos.z);
 	properties.vel = v;
 	properties.damping = damp;
 	properties.aceleration = acel;
 	properties.tiempoVida = tiempoVida_;
+	
+	if (m == 0) properties.masa = 1;
+	else {
+		properties.masa = m;
+		properties.inv_mass = 1 / m;
+	}
 
 	properties.renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(0.5)), &properties.pose, {1, 1, 0, 1});
 
@@ -19,20 +25,23 @@ void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, do
 	properties.vel = v;
 	properties.damping = damp;
 	properties.aceleration = acel;
-	properties.masa = m;
 	properties.shape = shape;
 	properties.tiempoVida = tiempoVida_;
 	properties.center = center_;
 	properties.maxRange = maxRange_;
 	properties.compruebaRango = compruebaRango_;
 
+	if (m == 0) properties.masa = 1;
+	else {
+		properties.masa = m;
+		properties.inv_mass = 1 / m;
+	}
+
 	if (prefab) {
 		properties.renderItem = new RenderItem(shape, &properties.pose, { 1, 0, 0, 1 });
 	}
 
 	else properties.renderItem = nullptr;
-
-	//RegisterRenderItem(properties.renderItem);
 }
 
 Particle::~Particle()
@@ -42,10 +51,19 @@ Particle::~Particle()
 
 void Particle::integrate(double t)
 {
+
+	if (properties.inv_mass <= 0) return;
+
 	properties.pose.p = properties.pose.p + (properties.vel * t);
-	properties.vel = properties.vel * (pow(properties.damping, t)) + properties.aceleration * t;
+	
+	Vector3 totalA = properties.aceleration;
+	totalA += properties.force * properties.inv_mass;
+	
+	properties.vel = properties.vel * (pow(properties.damping, t)) + totalA * t;
 
 	properties.tiempoVida -= t;
+
+	clearForce();
 }
 
 bool Particle::viva()
@@ -80,6 +98,16 @@ void Particle::setPos(Vector3 pos) {
 void Particle::setVel(Vector3 vel)
 {
 	properties.vel = vel;
+}
+
+void Particle::addForce(const Vector3& f)
+{
+	properties.force += f;
+}
+
+void Particle::clearForce()
+{
+	properties.force *= 0;
 }
 
 void Particle::copyParticle(Particle* p)
