@@ -20,9 +20,10 @@ public:
 	}
 
 	void deleteParticleRegistry(Particle *p) {
-		/*for (auto it = begin(); it != end(); it++) {
-			;
-		}*/
+		for (auto it = begin(); it != end();) {
+			if (it->second == p) it = erase(it);
+			else it++;
+		}
 	}
 
 };

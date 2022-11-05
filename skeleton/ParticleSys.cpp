@@ -27,8 +27,10 @@ void ParticleSys::update(double t)
 				particles.insert(particles.end(), explosion.begin(), explosion.end());
 			}
 
+			FR->deleteParticleRegistry(*i);
 			delete (*i);
 			i = particles.erase(i);
+			
 		}
 
 		else {
@@ -63,7 +65,7 @@ void ParticleSys::addGen(TipoGen tipo)
 	switch (tipo)
 	{
 	case Gaussian:
-		p->setParticle(Vector3(0,0,0), Vector3(0,0,0), 0.8, Vector3(0, -9.8, 0), 440, 
+		p->setParticle(Vector3(0,0,0), Vector3(0,0,0), 0.8, Vector3(0, 0, 0), 440, 
 			CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(15, 40, 0), Vector3(20, 20, 20), false, true);
 		gen = new GaussianParticleGen(p, 1, Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1, randTypeForce);
 		gen->setMeans(Vector3(15, 40, 0), camera->getDir() * (-10));
