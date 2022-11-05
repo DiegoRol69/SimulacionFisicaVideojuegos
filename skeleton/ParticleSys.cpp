@@ -95,9 +95,10 @@ void ParticleSys::addForceGen(TipoFuerza f, Particle *p)
 	{
 	case GRAVITY:
 		fg = new GravityForceGenerator({ 0,8.5,0 });
-		FR->addRegistry(fg, p);
+		forceGen.push_back(fg);
 		break;
 	case DRAG:
+
 		break;
 	default:
 		break;

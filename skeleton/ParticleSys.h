@@ -12,6 +12,7 @@ class ParticleSys
 
 	std::list<Particle*> particles;
 	std::list<ParticleGenerator*> particleGen;
+	std::list<ForceGenerator*> forceGen;
 	std::vector<FireWork*> firework_pool;
 	ParticleForceRegistry *FR;
 
