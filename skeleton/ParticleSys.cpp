@@ -12,22 +12,10 @@ ParticleSys::ParticleSys()
 
 void ParticleSys::update(double t)
 {
-
-	for (auto j : particleGen) {
-
-		std::list<Particle*> aux = j->generateParticles();
-
-		for (auto i : aux) {
-			particles.push_back(i);
-		}
-
-	}
-
 	auto i = particles.begin();
 
 	while ( i != particles.end()) {
 
-		FR->updateForces(t);
 		(*i)->integrate(t);
 
 		if (!(*i)->viva()) {
@@ -46,7 +34,19 @@ void ParticleSys::update(double t)
 		else {
 			++i;
 		}
-	 }
+	}
+
+	for (auto j : particleGen) {
+
+		FR->updateForces(t);
+
+		std::list<Particle*> aux = j->generateParticles();
+
+		for (auto i : aux) {
+			particles.push_back(i);
+		}
+
+	}
 }
 
 void ParticleSys::addGen(TipoGen tipo, TipoFuerza f)
@@ -89,11 +89,12 @@ void ParticleSys::addGen(TipoGen tipo, TipoFuerza f)
 
 void ParticleSys::addForceGen(TipoFuerza f, Particle *p)
 {
-	GravityForceGenerator* fg = new GravityForceGenerator({ 8.5,8.5,8.5 });
+	ForceGenerator* fg;
 
 	switch (f)
 	{
 	case GRAVITY:
+		fg = new GravityForceGenerator({ 0,8.5,0 });
 		FR->addRegistry(fg, p);
 		break;
 	case DRAG:
