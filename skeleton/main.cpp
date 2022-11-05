@@ -125,10 +125,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'G':
-		sysParticle->addGen(Gaussian);
+		sysParticle->addGen(Gaussian, GRAVITY);
 		break;
 	case 'U':
-		sysParticle->addGen(Uniform);
+		sysParticle->addGen(Uniform, GRAVITY);
 		break;
 	case 'F':
 		sysParticle->shootFirework(0);
@@ -137,7 +137,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		sysParticle->shootFirework(1);
 		break; 
 	case 'C':
-		sysParticle->addGen(Circle);
+		sysParticle->addGen(Circle, GRAVITY);
 		break;
 	/*case 'B':
 		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));

@@ -30,6 +30,7 @@ void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, do
 	properties.center = center_;
 	properties.maxRange = maxRange_;
 	properties.compruebaRango = compruebaRango_;
+	properties.force = {0,0,0};
 
 	if (m == 0) properties.masa = 1;
 	else {
@@ -124,6 +125,8 @@ void Particle::copyParticle(Particle* p)
 	properties.center = pModel.center;
 	properties.maxRange = pModel.maxRange;
 	properties.compruebaRango = pModel.compruebaRango;
+	properties.force = pModel.force;
+	properties.inv_mass = pModel.inv_mass;
 
 	std::uniform_real_distribution<double> color(0, 1);
 

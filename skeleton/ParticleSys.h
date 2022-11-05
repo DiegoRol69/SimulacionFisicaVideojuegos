@@ -3,6 +3,7 @@
 #include "Particle.h"
 #include "ParticleGenerator.h"
 #include "FireWork.h"
+#include "ParticleForceRegistry.h"
 
 enum TipoGen {Gaussian, Uniform, Circle};
 
@@ -12,6 +13,7 @@ class ParticleSys
 	std::list<Particle*> particles;
 	std::list<ParticleGenerator*> particleGen;
 	std::vector<FireWork*> firework_pool;
+	ParticleForceRegistry *FR;
 
 	Vector3 max_pos;
 	Vector3 min_pos;
@@ -22,7 +24,8 @@ public:
 	~ParticleSys() {};
 
 	void update( double t);
-	void addGen(TipoGen tipo);
+	void addGen(TipoGen tipo, TipoFuerza f);
+	void addForceGen(TipoFuerza f, Particle* p);
 
 	void shootFirework(int type);
 	void generateFireworkSystem();

@@ -3,10 +3,11 @@
 #include "UniformParticleGen.h"
 #include "CircleParticleGen.h"
 #include "RenderUtils.hpp"
+#include "GravityForceGenerator.h"
 
 ParticleSys::ParticleSys()
 {
-
+	FR = new ParticleForceRegistry();
 }
 
 void ParticleSys::update(double t)
@@ -26,6 +27,7 @@ void ParticleSys::update(double t)
 
 	while ( i != particles.end()) {
 
+		FR->updateForces(t);
 		(*i)->integrate(t);
 
 		if (!(*i)->viva()) {
@@ -47,7 +49,7 @@ void ParticleSys::update(double t)
 	 }
 }
 
-void ParticleSys::addGen(TipoGen tipo)
+void ParticleSys::addGen(TipoGen tipo, TipoFuerza f)
 {
 	srand(time(NULL));
 	Camera* camera = GetCamera();
@@ -60,18 +62,21 @@ void ParticleSys::addGen(TipoGen tipo)
 	case Gaussian:
 		p->setParticle(Vector3(0,0,0), Vector3(0,0,0), 0.8, Vector3(0, -9.8, 0), 440, 
 			CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(15, 40, 0), Vector3(20, 20, 20), false, true);
+		addForceGen(f, p);
 		gen = new GaussianParticleGen(p, 1, Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1);
 		gen->setMeans(Vector3(15, 40, 0), camera->getDir() * (-10));
 		break;
 	case Uniform:
 		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 9.8, 0), 440, 
 			CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(0, 40, 0), Vector3(10, 15, 10), false, true);
+		addForceGen(f, p);
 		gen = new UniformParticleGen(p, 10, 0.1, Vector3(10, 10, 10), Vector3(3, 3, 3));
 		gen->setMeans(Vector3(0, 40, 0), Vector3(0, 0, 0));
 		break;
 	case Circle:
 		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, -9.8, 0), 440, 
 			CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(0, 40, 0), Vector3(50, 50, 50), false, true);
+		addForceGen(f, p);
 		type randomType = static_cast<type>(rand()%ult);
 		gen = new CircleParticleGen(p, 10, 0.8, 20,  randomType);
 		gen->setMeans(Vector3(0, 40, 0), Vector3(0, 0, 0));
@@ -80,6 +85,22 @@ void ParticleSys::addGen(TipoGen tipo)
 
 	particleGen.push_back(gen);
 
+}
+
+void ParticleSys::addForceGen(TipoFuerza f, Particle *p)
+{
+	GravityForceGenerator* fg = new GravityForceGenerator({ 8.5,8.5,8.5 });
+
+	switch (f)
+	{
+	case GRAVITY:
+		FR->addRegistry(fg, p);
+		break;
+	case DRAG:
+		break;
+	default:
+		break;
+	}
 }
 
 void ParticleSys::shootFirework(int type)

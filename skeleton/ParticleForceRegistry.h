@@ -3,6 +3,7 @@
 #include <map>
 
 typedef std::pair<ForceGenerator*, Particle*> FRPair;
+enum TipoFuerza {NADA, GRAVITY, DRAG };
 
 class ParticleForceRegistry:public std::multimap<ForceGenerator*, Particle*>
 {
@@ -16,11 +17,13 @@ public:
 	}
 
 	void addRegistry(ForceGenerator* fg, Particle *p) {
-		insert({ fg, p });
+		insert(FRPair(fg, p ));
 	}
 
 	void deleteParticleRegistry(Particle *p) {
-
+		/*for (auto it = begin(); it != end(); it++) {
+			;
+		}*/
 	}
 
 };
