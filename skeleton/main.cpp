@@ -81,14 +81,6 @@ void stepPhysics(bool interactive, double t)
 	gScene->fetchResults(true);
 
 	sysParticle->update(t);
-
-	//for (int i = 0; i < proyectiles.size(); i++) {
-	//	proyectiles[i]->integrate(t);
-	//}
-
-	//for (int i = 0; i < particles.size(); i++) {
-	//	//particles[i]->integrate(t);
-	//}
 }
 
 // Function to clean data
@@ -107,14 +99,6 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
-
-	//for (int i = 0; i < proyectiles.size(); i++) {
-	//	delete proyectiles[i];
-	//}
-
-	//for (int i = 0; i < particles.size(); i++) {
-	//	delete particles[i];
-	//}
 }
 
 // Function called when a key is pressed
@@ -125,10 +109,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'G':
-		sysParticle->addGen(Gaussian, GRAVITY);
+		sysParticle->addGen(Gaussian);
 		break;
 	case 'U':
-		sysParticle->addGen(Uniform, GRAVITY);
+		sysParticle->addGen(Uniform);
 		break;
 	case 'F':
 		sysParticle->shootFirework(0);
@@ -137,7 +121,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		sysParticle->shootFirework(1);
 		break; 
 	case 'C':
-		sysParticle->addGen(Circle, DRAG);
+		sysParticle->addGen(Circle);
 		break;
 	/*case 'B':
 		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));

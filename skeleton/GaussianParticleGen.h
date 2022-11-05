@@ -19,11 +19,14 @@ class GaussianParticleGen : public ParticleGenerator
 
 public:
 
-	GaussianParticleGen(Particle *p, int n, Vector3 dev_pos_, Vector3 dev_vel_, double _generation_probability_, double dev_t_);
+	GaussianParticleGen(Particle *p, int n, Vector3 dev_pos_, Vector3 dev_vel_, 
+		double _generation_probability_, double dev_t_, typeF tipoF_);
 
 	~GaussianParticleGen() {};
 
 	 std::list<Particle*> generateParticles() override;
 	 void setDistribution() override;
+	 void setForceToClon() override;
+	 ForceGenerator *getTypeF() override;
 };
 

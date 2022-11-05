@@ -1,7 +1,7 @@
 #include "GaussianParticleGen.h"
 
 GaussianParticleGen::GaussianParticleGen(Particle* p, int n, Vector3 dev_pos_, Vector3 dev_vel_, double _generation_probability_,
-    double dev_t_) {
+    double dev_t_, typeF tipoF_) {
 
     _model = p;
 
@@ -10,8 +10,9 @@ GaussianParticleGen::GaussianParticleGen(Particle* p, int n, Vector3 dev_pos_, V
     dev_vel = dev_vel_;
     _generation_probability = _generation_probability_;
     dev_t = dev_t_;
+    tipoF = tipoF_;
 
-
+    setForceToClon();
 }
 
 void GaussianParticleGen::setDistribution() {
@@ -22,6 +23,23 @@ void GaussianParticleGen::setDistribution() {
     vx = std::normal_distribution<>(mean_vel.x, dev_vel.x);
     vy = std::normal_distribution<>(mean_vel.y, dev_vel.y);
     vz = std::normal_distribution<>(mean_vel.z, dev_vel.z);
+}
+
+void GaussianParticleGen::setForceToClon()
+{
+    switch (tipoF)
+    {
+    case Gravity:
+        fg = new GravityForceGenerator({ 0,8.5,0 });
+        break;
+    default:
+        break;
+    }
+}
+
+ForceGenerator *GaussianParticleGen::getTypeF()
+{
+    return fg;
 }
 
 std::list<Particle*> GaussianParticleGen::generateParticles()

@@ -25,8 +25,7 @@ public:
 	~ParticleSys() {};
 
 	void update( double t);
-	void addGen(TipoGen tipo, TipoFuerza f);
-	void addForceGen(TipoFuerza f, Particle* p);
+	void addGen(TipoGen tipo);
 
 	void shootFirework(int type);
 	void generateFireworkSystem();

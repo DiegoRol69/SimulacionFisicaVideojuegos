@@ -1,12 +1,16 @@
 #include "UniformParticleGen.h"
 
-UniformParticleGen::UniformParticleGen(Particle *p, int n, double _generation_probability_, Vector3 pos_width_, Vector3 vel_width_)
+UniformParticleGen::UniformParticleGen(Particle *p, int n, double _generation_probability_, 
+    Vector3 pos_width_, Vector3 vel_width_, typeF tipoF_)
 {
     _model = p;
     num_particles = n;
     _generation_probability = _generation_probability_;
     pos_width = pos_width_;
     vel_width = vel_width_;
+    tipoF = tipoF_;
+
+    setForceToClon();
 }
 
 void UniformParticleGen::setDistribution() {
@@ -18,6 +22,23 @@ void UniformParticleGen::setDistribution() {
     vx = std::uniform_real_distribution<>(mean_vel.x - vel_width.x / 2, mean_vel.x + vel_width.x / 2);
     vy = std::uniform_real_distribution<>(mean_vel.y - vel_width.y / 2, mean_vel.y + vel_width.y / 2);
     vz = std::uniform_real_distribution<>(mean_vel.z - vel_width.z / 2, mean_vel.z + vel_width.z / 2);
+}
+
+void UniformParticleGen::setForceToClon()
+{
+    switch (tipoF)
+    {
+    case Gravity:
+        fg = new GravityForceGenerator({ 0,8.5,0 });
+        break;
+    default:
+        break;
+    }
+}
+
+ForceGenerator *UniformParticleGen::getTypeF()
+{
+    return fg;
 }
 
 std::list<Particle*> UniformParticleGen::generateParticles()

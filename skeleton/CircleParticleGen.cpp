@@ -1,17 +1,21 @@
 #include "CircleParticleGen.h"
 
-CircleParticleGen::CircleParticleGen(Particle* p, int n, double _generation_probability_, double radius_, type tipo_)
+CircleParticleGen::CircleParticleGen(Particle* p, int n, double _generation_probability_, 
+    double radius_, typeC tipo_, typeF tipoF_)
 {
     _model = p;
     radius = radius_;
     num_particles = n;
     _generation_probability = _generation_probability_;
-    tipo = tipo_;
+    tipoCircle = tipo_;
+    tipoF = tipoF_;
+
+    setForceToClon();
 }
 
 void CircleParticleGen::setPosCircle(double angle_) {
 
-    switch (tipo)
+    switch (tipoCircle)
     {
     case FunteChocolate:
         vel_result = { float(physx::PxCos(angle) * radius), float(0), float(physx::PxSin(angle) * radius) };
@@ -22,6 +26,23 @@ void CircleParticleGen::setPosCircle(double angle_) {
     default:
         break;
     }    
+}
+
+void CircleParticleGen::setForceToClon()
+{
+    switch (tipoF)
+    {
+    case Gravity:
+        fg = new GravityForceGenerator({ 0,8.5,0 });
+        break;
+    default:
+        break;
+    }
+}
+
+ForceGenerator *CircleParticleGen::getTypeF()
+{
+    return fg;
 }
 
 std::list<Particle*> CircleParticleGen::generateParticles()

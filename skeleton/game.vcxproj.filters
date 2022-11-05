@@ -17,7 +17,6 @@
     <ClCompile Include="UniformParticleGen.cpp" />
     <ClCompile Include="FireWork.cpp" />
     <ClCompile Include="CircleParticleGen.cpp" />
-    <ClCompile Include="SquareParticleGen.cpp" />
     <ClCompile Include="GravityForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -38,7 +37,6 @@
     <ClInclude Include="UniformParticleGen.h" />
     <ClInclude Include="FireWork.h" />
     <ClInclude Include="CircleParticleGen.h" />
-    <ClInclude Include="SquareParticleGen.h" />
     <ClInclude Include="ForceGenerator.h" />
     <ClInclude Include="GravityForceGenerator.h" />
     <ClInclude Include="ParticleForceRegistry.h" />

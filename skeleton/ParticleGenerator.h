@@ -2,6 +2,10 @@
 #include <list>
 #include "Particle.h"
 #include <random>
+#include "ForceGenerator.h"
+#include "GravityForceGenerator.h"
+
+enum typeF { Gravity, ultimo };
 
 class ParticleGenerator
 {
@@ -18,11 +22,16 @@ protected:
 
 	std::random_device rd{};
 	std::mt19937 gen{ rd() };
+	
+	typeF tipoF;
+	ForceGenerator* fg;
 
 public:
 
 	virtual std::list<Particle*> generateParticles () = 0;
 	virtual void setDistribution() = 0;
+	virtual void setForceToClon() = 0;
+	virtual ForceGenerator *getTypeF() = 0;
 
 	void setMeans(Vector3 mean_pos_, Vector3 mean_vel_) {
 		mean_pos = mean_pos_;

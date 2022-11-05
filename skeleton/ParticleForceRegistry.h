@@ -3,7 +3,6 @@
 #include <map>
 
 typedef std::pair<ForceGenerator*, Particle*> FRPair;
-enum TipoFuerza {NADA, GRAVITY, DRAG };
 
 class ParticleForceRegistry:public std::multimap<ForceGenerator*, Particle*>
 {
