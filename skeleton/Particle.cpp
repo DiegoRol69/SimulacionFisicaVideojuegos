@@ -19,7 +19,7 @@ Particle::Particle(Vector3 pos, Vector3 v, double damp, double m, Vector3 acel, 
 }
 
 void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape, 
-	double tiempoVida_, Vector3 center_, Vector3 maxRange_, bool prefab, bool compruebaRango_)
+	double tiempoVida_, Vector3 center_, Vector3 maxRange_, bool prefab, bool compruebaRango_, double radius)
 {
 	properties.pose = physx::PxTransform(pos.x, pos.y, pos.z);
 	properties.vel = v;
@@ -31,6 +31,7 @@ void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, do
 	properties.maxRange = maxRange_;
 	properties.compruebaRango = compruebaRango_;
 	properties.force = {0,0,0};
+	properties.radius = radius;
 
 	if (m == 0) properties.masa = 1;
 	else {
@@ -39,7 +40,9 @@ void Particle::setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, do
 	}
 
 	if (prefab) {
-		properties.renderItem = new RenderItem(shape, &properties.pose, { 1, 0, 0, 1 });
+		std::uniform_real_distribution<double> color(0, 1);
+
+		properties.renderItem = new RenderItem(properties.shape, &properties.pose, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
 	}
 
 	else properties.renderItem = nullptr;
@@ -127,6 +130,7 @@ void Particle::copyParticle(Particle* p)
 	properties.compruebaRango = pModel.compruebaRango;
 	properties.force = pModel.force;
 	properties.inv_mass = pModel.inv_mass;
+	properties.radius = pModel.radius;
 
 	std::uniform_real_distribution<double> color(0, 1);
 

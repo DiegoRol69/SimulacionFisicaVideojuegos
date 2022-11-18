@@ -35,6 +35,12 @@ void CircleParticleGen::setForceToClon()
     case Gravity:
         fg = new GravityForceGenerator({ 0,8.5,0 });
         break;
+    case Wind:
+        fg = new WindForceGenerator(1.8, 0.0, { 8.5,0,0 });
+        break;
+    case Whirl:
+        fg = new Whirlwind(-10, { 15,30,0 });
+        break;
     default:
         break;
     }

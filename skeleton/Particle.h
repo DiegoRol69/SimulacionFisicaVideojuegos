@@ -12,6 +12,7 @@ struct particleProperties {
 	double masa;
 	double tiempoVida;
 	double inv_mass;
+	double radius;
 	physx::PxShape* shape;	
 	physx::PxTransform pose;
 	RenderItem* renderItem;
@@ -27,7 +28,7 @@ public:
 	Particle(Vector3 pos, Vector3 v, double damp, double m, Vector3 acel, double tiempoVida_);
 	~Particle();
 	void setParticle(Vector3 pos, Vector3 v, double damp, Vector3 acel, double m, physx::PxShape* shape, 
-		double tiempoVida_, Vector3 center_, Vector3 maxRange_,  bool prefab, bool compruebaRango_);
+		double tiempoVida_, Vector3 center_, Vector3 maxRange_,  bool prefab, bool compruebaRango_, double radius);
 
 	virtual Particle* clone();
 	void copyParticle(Particle* p);

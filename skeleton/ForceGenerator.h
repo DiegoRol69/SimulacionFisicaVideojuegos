@@ -3,6 +3,7 @@
 #include "Particle.h"
 #include <list>
 #include <random>
+#include <cmath>
 
 class ForceGenerator
 {

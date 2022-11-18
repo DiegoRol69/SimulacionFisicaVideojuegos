@@ -255,27 +255,33 @@
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="CircleParticleGen.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="FireWork.cpp" />
     <ClCompile Include="GaussianParticleGen.cpp" />
     <ClCompile Include="GravityForceGenerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleDragGenerator.cpp" />
     <ClCompile Include="ParticleSys.cpp" />
     <ClCompile Include="Proyectile.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="UniformParticleGen.cpp" />
+    <ClCompile Include="Whirlwind.cpp" />
+    <ClCompile Include="WindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="CircleParticleGen.h" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="FireWork.h" />
     <ClInclude Include="ForceGenerator.h" />
     <ClInclude Include="GaussianParticleGen.h" />
     <ClInclude Include="GravityForceGenerator.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleDragGenerator.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="ParticleGenerator.h" />
     <ClInclude Include="ParticleSys.h" />
@@ -284,6 +290,8 @@
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="UniformParticleGen.h" />
+    <ClInclude Include="Whirlwind.h" />
+    <ClInclude Include="WindForceGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

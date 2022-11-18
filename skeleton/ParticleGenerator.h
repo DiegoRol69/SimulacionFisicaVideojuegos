@@ -4,8 +4,11 @@
 #include <random>
 #include "ForceGenerator.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
+#include "Whirlwind.h"
+#include "Explosion.h"
 
-enum typeF { Gravity, ultimo };
+enum typeF { Gravity, Wind, Whirl, ultimo };
 
 class ParticleGenerator
 {
