@@ -59,14 +59,6 @@ void initPhysics(bool interactive)
 	sysParticle = new ParticleSys();
 
 	sysParticle->generateFireworkSystem();
-
-	//Vector3 pos = GetCamera()->getTransform().p;
-	//Vector3 vel = {0,0,0};
-	//double damping = 0.999;
-	//Vector3 acel = {0, 0, 0};
-	//Vector3 ofset = {-100, 0, -100};
-
-	//particles.push_back(new Particle(pos + ofset, vel, damping, acel));
 }
 
 
@@ -131,6 +123,18 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'H':
 		sysParticle->addWind();
+		break;
+	case 'Y':
+		sysParticle->addGravity();
+		break;
+	case 'M':
+		sysParticle->Spring();
+		break;
+	case 'K':
+		sysParticle->addK();
+		break;
+	case 'Q':
+		sysParticle->quitRegistry();
 		break;
 	/*case 'B':
 		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));

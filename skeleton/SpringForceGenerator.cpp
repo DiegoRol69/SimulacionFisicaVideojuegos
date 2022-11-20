@@ -7,7 +7,7 @@ SpringForceGenerator::SpringForceGenerator(double k_, double restingLength_, Par
 	other = other_;
 }
 
-void SpringForceGenerator::updateForce(Particle* particle)
+void SpringForceGenerator::updateForce(Particle* particle, double t)
 {
 	Vector3 force = other->getProperties().pose.p - particle->getProperties().pose.p;
 
@@ -17,4 +17,9 @@ void SpringForceGenerator::updateForce(Particle* particle)
 	force *= delta_x * k;
 
 	particle->addForce(force);
+}
+
+void SpringForceGenerator::setK(double k_)
+{
+	k += k_;
 }

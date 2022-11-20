@@ -10,13 +10,6 @@ ParticleSys::ParticleSys()
 	FR = new ParticleForceRegistry();
 	srand(time(NULL));
 	explosionActive = false;
-
-	double radius = 0.5;
-
-	Particle* p1 = new Particle();
-	p1->p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
-		CreateShape(physx::PxSphereGeometry(radius)), 100, 
-		Vector3(15, 40, 0), Vector3(60, 60, 60), false, false, radius);
 }
 
 void ParticleSys::update(double t)
@@ -144,6 +137,28 @@ void ParticleSys::addWind()
 	}
 }
 
+void ParticleSys::addGravity()
+{
+	if (particles.size() > 0) {
+		gf = new GravityForceGenerator({ 0,-9.8,0 });
+	}
+
+	for (auto i : particles) {
+		FR->addRegistry(gf, i);
+	}
+}
+
+void ParticleSys::addK()
+{
+	fsp->setK(5);
+}
+
+void ParticleSys::quitRegistry()
+{
+	FR->deleteParticleRegistry(muelle);
+	FR->addRegistry(fsp, muelle);
+}
+
 void ParticleSys::shootFirework(int type)
 {
 	FireWork* fw = new FireWork();
@@ -176,4 +191,23 @@ void ParticleSys::generateFireworkSystem()
 	firework_pool.push_back(fw);
 
 
+}
+
+void ParticleSys::Spring()
+{
+	double radius = 0.5;
+
+	muelle = new Particle();
+	muelle->setParticle(Vector3(-10, 10, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
+		CreateShape(physx::PxSphereGeometry(radius)), 100,
+		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
+	Particle* p2 = new Particle();
+	p2->setParticle(Vector3(10, 10, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 2,
+		CreateShape(physx::PxSphereGeometry(radius)), 100,
+		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
+
+	fsp = new SpringForceGenerator(100, 10, p2);
+	FR->addRegistry(fsp, muelle);
+
+	particles.push_back(muelle);
 }

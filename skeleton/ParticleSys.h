@@ -1,9 +1,10 @@
 #pragma once
 #include <list>
 #include "Particle.h"
-#include "ParticleGenerator.h"
 #include "FireWork.h"
+#include "ParticleGenerator.h"
 #include "ParticleForceRegistry.h"
+#include "SpringForceGenerator.h"
 
 enum TipoGen {Gaussian, Uniform, Circle};
 
@@ -16,8 +17,12 @@ class ParticleSys
 	std::vector<FireWork*> firework_pool;
 
 	ParticleForceRegistry *FR;
-	Explosion* explosion;
 	WindForceGenerator * wind;
+	SpringForceGenerator* fsp;
+	GravityForceGenerator* gf;
+	Explosion* explosion;
+	
+	Particle* muelle;
 
 	Vector3 max_pos;
 	Vector3 min_pos;
@@ -34,8 +39,13 @@ public:
 	void addParticle();
 	void addExplosion();
 	void addWind();
+	void addGravity();
+	void addK();
+
+	void quitRegistry();
 
 	void shootFirework(int type);
 	void generateFireworkSystem();
+	void Spring();
 };
 
