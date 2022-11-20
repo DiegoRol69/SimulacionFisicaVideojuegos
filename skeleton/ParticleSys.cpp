@@ -10,6 +10,13 @@ ParticleSys::ParticleSys()
 	FR = new ParticleForceRegistry();
 	srand(time(NULL));
 	explosionActive = false;
+
+	double radius = 0.5;
+
+	Particle* p1 = new Particle();
+	p1->p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
+		CreateShape(physx::PxSphereGeometry(radius)), 100, 
+		Vector3(15, 40, 0), Vector3(60, 60, 60), false, false, radius);
 }
 
 void ParticleSys::update(double t)
@@ -62,7 +69,7 @@ void ParticleSys::addGen(TipoGen tipo)
 	Particle* p = new Particle();
 
 	ParticleGenerator* gen;
-	typeF randTypeForce = Whirl;//static_cast<typeF>(rand() % ultimo);
+	typeF randTypeForce = static_cast<typeF>(rand() % ultimo);
 	double radius = 0.5;
 
 	switch (tipo)
