@@ -14,6 +14,7 @@ public:
 protected:
 	double k;
 	double restingLength;
+	double longMin;
 	Particle* other;
 };
 

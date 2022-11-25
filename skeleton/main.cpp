@@ -136,6 +136,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'Q':
 		sysParticle->quitRegistry();
 		break;
+	case 'L':
+		sysParticle->Anchored();
+		break;
+	case 'O':
+		sysParticle->Slinky();
+		break;
+	case 'B':
+		sysParticle->Buoyancy();
+		break;
 	/*case 'B':
 		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
 		break;

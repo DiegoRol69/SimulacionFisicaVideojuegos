@@ -14,9 +14,11 @@ void SpringForceGenerator::updateForce(Particle* particle, double t)
 	const float length = force.normalize();
 	const float delta_x = length - restingLength;
 
-	force *= delta_x * k;
+	if (length > restingLength) {
+		force *= delta_x * k;
 
-	particle->addForce(force);
+		particle->addForce(force);
+	}
 }
 
 void SpringForceGenerator::setK(double k_)

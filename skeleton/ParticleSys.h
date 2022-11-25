@@ -5,6 +5,8 @@
 #include "ParticleGenerator.h"
 #include "ParticleForceRegistry.h"
 #include "SpringForceGenerator.h"
+#include "AnchoredSpringForceGenerator.h"
+#include "ParticleDragGenerator.h"
 
 enum TipoGen {Gaussian, Uniform, Circle};
 
@@ -18,11 +20,13 @@ class ParticleSys
 
 	ParticleForceRegistry *FR;
 	WindForceGenerator * wind;
-	SpringForceGenerator* fsp;
+	SpringForceGenerator* fsp1;
+	SpringForceGenerator* fsp2;
 	GravityForceGenerator* gf;
 	Explosion* explosion;
 	
-	Particle* muelle;
+	Particle* muelle1;
+	Particle* muelle2;
 
 	Vector3 max_pos;
 	Vector3 min_pos;
@@ -47,5 +51,8 @@ public:
 	void shootFirework(int type);
 	void generateFireworkSystem();
 	void Spring();
+	void Anchored();
+	void Slinky();
+	void Buoyancy();
 };
 
