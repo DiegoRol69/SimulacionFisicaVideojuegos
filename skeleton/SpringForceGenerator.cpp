@@ -16,9 +16,9 @@ void SpringForceGenerator::updateForce(Particle* particle, double t)
 
 	if (length > restingLength) {
 		force *= delta_x * k;
-
 		particle->addForce(force);
 	}
+
 }
 
 void SpringForceGenerator::setK(double k_)

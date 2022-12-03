@@ -212,10 +212,10 @@ void ParticleSys::Spring()
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
-	fsp1 = new SpringForceGenerator(100, 19, muelle2);
+	fsp1 = new SpringForceGenerator(500, 10, muelle2);
 	FR->addRegistry(fsp1, muelle1);
 
-	fsp2 = new SpringForceGenerator(100, 19,  muelle1);
+	fsp2 = new SpringForceGenerator(500, 10,  muelle1);
 	FR->addRegistry(fsp2, muelle2);
 
 	particles.push_back(muelle2);
@@ -232,7 +232,7 @@ void ParticleSys::Anchored()
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
-	AnchoredSpringForceGenerator* f = new AnchoredSpringForceGenerator(1,10,{10,20,0});
+	AnchoredSpringForceGenerator* f = new AnchoredSpringForceGenerator(5,10,{10,20,0});
 	FR->addRegistry(f, p);
 	particles.push_back(p);
 }
@@ -241,62 +241,61 @@ void ParticleSys::Slinky()
 {
 	double radius = 2;
 
-	Particle* p1 = new Particle();
-
-	p1->setParticle(Vector3(0, -30, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
-		CreateShape(physx::PxSphereGeometry(radius)), 100,
-		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
-
 	Particle* p2 = new Particle();
 
-	p2->setParticle(Vector3(0, -20, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
+	p2->setParticle(Vector3(0, 20, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 5,
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
 	Particle* p3 = new Particle();
 
-	p3->setParticle(Vector3(0, -10, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
+	p3->setParticle(Vector3(0, 10, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 5,
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
 	Particle* p4 = new Particle();
 
-	p4->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
+	p4->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 5,
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
 	Particle* p5 = new Particle();
 
-	p5->setParticle(Vector3(0, 10, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
+	p5->setParticle(Vector3(0, -10, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 5,
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
 	Particle* p6 = new Particle();
 
-	p6->setParticle(Vector3(0, 20, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10,
+	p6->setParticle(Vector3(0, -20, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 5,
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
-	SpringForceGenerator* f1 = new SpringForceGenerator(10, 5, p2);
-	FR->addRegistry(f1, p1);
+	AnchoredSpringForceGenerator* f1 = new AnchoredSpringForceGenerator(30, 5, { 0,30,0 });
+	FR->addRegistry(f1, p2);
+	SpringForceGenerator* f2 = new SpringForceGenerator(30, 5, p2);
+	//2,3
+	FR->addRegistry(f2, p3);
+	SpringForceGenerator* f3 = new SpringForceGenerator(30, 5, p3);
+	FR->addRegistry(f3, p2);
+	//3,4
+	FR->addRegistry(f3, p4);
+	SpringForceGenerator* f4 = new SpringForceGenerator(30, 5, p4);
+	FR->addRegistry(f4, p3);
+	//4,5
+	FR->addRegistry(f4, p5);
+	SpringForceGenerator* f5 = new SpringForceGenerator(30, 5, p5);
+	FR->addRegistry(f5, p4);
+	//5,6
+	FR->addRegistry(f5, p6);
+	SpringForceGenerator* f6 = new SpringForceGenerator(30, 5, p6);
+	FR->addRegistry(f6, p5);
 
-	SpringForceGenerator* f2 = new SpringForceGenerator(10, 5, p3);
-	FR->addRegistry(f2, p2);
-
-	SpringForceGenerator* f3 = new SpringForceGenerator(10, 5, p4);
-	FR->addRegistry(f3, p3);
-
-	SpringForceGenerator* f4 = new SpringForceGenerator(10, 5, p5);
-	FR->addRegistry(f4, p4);
-
-	SpringForceGenerator* f5 = new SpringForceGenerator(10, 5, p6);
-	FR->addRegistry(f5, p5);
-
-	particles.push_back(p1);
 	particles.push_back(p2);
 	particles.push_back(p3);
 	particles.push_back(p4);
 	particles.push_back(p5);
+	particles.push_back(p6);
 
 }
 
