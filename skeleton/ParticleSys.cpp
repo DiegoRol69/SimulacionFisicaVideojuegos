@@ -151,8 +151,12 @@ void ParticleSys::addGravity()
 
 void ParticleSys::addK()
 {
-	fsp1->setK(5);
-	if(fsp2 != nullptr) fsp2->setK(5);
+	if(fsp1 != nullptr) 
+		fsp1->setK(5);
+	if(fsp2 != nullptr) 
+		fsp2->setK(5);
+	if(fanch != nullptr) 
+		fanch->setK(5);
 }
 
 void ParticleSys::quitRegistry()
@@ -212,10 +216,10 @@ void ParticleSys::Spring()
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
-	fsp1 = new SpringForceGenerator(500, 10, muelle2);
+	fsp1 = new SpringForceGenerator(200, 10, muelle2);
 	FR->addRegistry(fsp1, muelle1);
 
-	fsp2 = new SpringForceGenerator(500, 10,  muelle1);
+	fsp2 = new SpringForceGenerator(200, 10,  muelle1);
 	FR->addRegistry(fsp2, muelle2);
 
 	particles.push_back(muelle2);
@@ -232,8 +236,8 @@ void ParticleSys::Anchored()
 		CreateShape(physx::PxSphereGeometry(radius)), 100,
 		Vector3(15, 40, 0), Vector3(60, 60, 60), true, false, radius);
 
-	AnchoredSpringForceGenerator* f = new AnchoredSpringForceGenerator(5,10,{10,20,0});
-	FR->addRegistry(f, p);
+	fanch = new AnchoredSpringForceGenerator(5,10,{10,20,0});
+	FR->addRegistry(fanch, p);
 	particles.push_back(p);
 }
 

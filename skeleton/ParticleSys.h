@@ -20,8 +20,9 @@ class ParticleSys
 
 	ParticleForceRegistry *FR;
 	WindForceGenerator * wind;
-	SpringForceGenerator* fsp1;
-	SpringForceGenerator* fsp2;
+	SpringForceGenerator* fsp1 = nullptr;
+	SpringForceGenerator* fsp2 = nullptr;
+	AnchoredSpringForceGenerator* fanch = nullptr;
 	GravityForceGenerator* gf;
 	Explosion* explosion;
 	

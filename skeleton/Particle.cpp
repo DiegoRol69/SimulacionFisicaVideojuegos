@@ -57,8 +57,6 @@ void Particle::integrate(double t)
 {
 
 	if (properties.inv_mass <= 0) return;
-
-	properties.pose.p = properties.pose.p + (properties.vel * t);
 	
 	Vector3 totalA = properties.aceleration;
 	totalA += properties.force * properties.inv_mass;
@@ -66,6 +64,8 @@ void Particle::integrate(double t)
 	properties.vel = properties.vel * (pow(properties.damping, t)) + totalA * t;
 
 	properties.tiempoVida -= t;
+
+	properties.pose.p = properties.pose.p + (properties.vel * t);
 
 	clearForce();
 }
