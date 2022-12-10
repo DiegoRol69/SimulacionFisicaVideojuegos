@@ -301,6 +301,7 @@
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="RigidParticle.h" />
     <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="TipoGenerador.h" />
     <ClInclude Include="UniformParticleGen.h" />
     <ClInclude Include="Whirlwind.h" />
     <ClInclude Include="WindForceGenerator.h" />

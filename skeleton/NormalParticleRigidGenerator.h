@@ -2,17 +2,17 @@
 #pragma once
 #include "ParticleRigidGenerator.h"
 
-#define MAX_P 100
-
 class NormalParticleRigidGenerator :public ParticleRigidGenerator
 {
+	double dev_t;
 
 public:
 
-	NormalParticleRigidGenerator(RigidParticle* rp_, int n, double _generation_probability_);
+	NormalParticleRigidGenerator(PxShape* shape_, char* name_, int n, double _generation_probability_, 
+		double dev_t_, double mean_t_);
 	~NormalParticleRigidGenerator() {};
 
-	std::list<RigidParticle*> generateParticles() override;
+	std::list<RigidParticle*> generateParticles(PxPhysics *gPhysics) override;
 	void setDistribution() override {};
 
 };

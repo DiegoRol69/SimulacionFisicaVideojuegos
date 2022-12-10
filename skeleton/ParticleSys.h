@@ -7,8 +7,7 @@
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringForceGenerator.h"
 #include "ParticleDragGenerator.h"
-
-enum TipoGen {Gaussian, Uniform, Circle};
+#include "TipoGenerador.h"
 
 class ParticleSys
 {

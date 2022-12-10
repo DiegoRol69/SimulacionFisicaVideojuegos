@@ -1,7 +1,7 @@
+#pragma once
+
 #include <ctype.h>
-
 #include <PxPhysicsAPI.h>
-
 #include <vector>
 
 #include "core.hpp"
@@ -121,14 +121,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'U':
 		sysParticle->addGen(Uniform);
 		break;
+	case 'C':
+		sysParticle->addGen(Circle);
+		break;
 	case 'F':
 		sysParticle->shootFirework(0);
 		break;
 	case 'E':
 		sysParticle->shootFirework(1);
-		break;
-	case 'C':
-		sysParticle->addGen(Circle);
 		break;
 	case 'P':
 		sysParticle->addParticle();
@@ -160,15 +160,22 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'B':
 		sysParticle->Buoyancy();
 		break;
+	//case 'Z':
+	//	world->createRigidDynamic(posCamera, 80 * camera_->getDir(), CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "proyectile");
+	//	break;
 	case 'Z':
-		world->createRigidDynamic(posCamera, 80 * camera_->getDir(), CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "proyectile");
+		world->deleteGenerators();
 		break;
-		/*case 'C':
-			proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
-			break;
-		case 'F':
-			proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
-			break;*/
+	case '1':
+		world->addGen(Standard);
+		break;
+	
+	/*case 'C':
+		proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
+		break;
+	case 'F':
+		proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
+		break;*/
 	default:
 		break;
 	}

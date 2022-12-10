@@ -30,7 +30,6 @@ PxRigidActor *RigidParticle::getActor()
 
 void RigidParticle::integrate(double t)
 {
-	std::cout << tiempoVida << "\n";
 	if (alive) {
 		tiempoVida -= t;
 		if (tiempoVida < 0) alive = false;

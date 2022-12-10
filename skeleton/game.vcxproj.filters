@@ -61,6 +61,7 @@
     <ClInclude Include="RigidParticle.h" />
     <ClInclude Include="ParticleRigidGenerator.h" />
     <ClInclude Include="NormalParticleRigidGenerator.h" />
+    <ClInclude Include="TipoGenerador.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

@@ -9,14 +9,14 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_) {
 	PxShape* shape = CreateShape(PxBoxGeometry(100, 0.1, 100));
 	Suelo->attachShape(*shape);
 	item = new RenderItem(shape, Suelo, { 0.8, 0.8, 0.8, 1 });
-	Suelo->setName("Suelo");
+	Suelo->setName("sinEfecto");
 	gScene->addActor(*Suelo);
 
 	PxRigidStatic* Pared = gPhysics->createRigidStatic(PxTransform({ 10 , 10, -30 }));
 	PxShape* shape_suelo = CreateShape(PxBoxGeometry(40, 20, 5));
 	Pared->attachShape(*shape_suelo);
 	item = new RenderItem(shape_suelo, Pared, { 0.8, 0.8, 0.8, 1 });
-	Pared->setName("Pared");
+	Pared->setName("sinEfecto");
 	gScene->addActor(*Pared);
 
 }
@@ -66,6 +66,33 @@ void WorldManager::collisionEfect(PxActor* actor1, PxActor* actor2)
 	}
 }
 
+void WorldManager::addGen(TipoGen tipo)
+{
+	ParticleRigidGenerator* generator;
+	std::uniform_real_distribution<double> radius(0.2, 2);
+
+	std::uniform_real_distribution<PxReal> size(0.2, 2);
+
+	PxMaterial* gMaterial = gPhysics->createMaterial(2.5f, 2.5f, 4.6f);
+
+	switch (tipo)
+	{
+	case Gaussian:
+		break;
+	case Uniform:
+		break;
+	case Circle:
+		break;
+	case Standard:
+		generator = new NormalParticleRigidGenerator(CreateShape(PxBoxGeometry(size(gen), size(gen), size(gen)), gMaterial), 
+			"sinEfecto", 1, 0.8, 1, 9);
+		generator->setMeans({ 0,100,0 }, { 0,-4,0 });
+		break;
+	}
+
+	particleGen.push_back(generator);
+}
+
 void WorldManager::update(double t)
 {
 	auto i = rigidParticles.begin();
@@ -84,7 +111,25 @@ void WorldManager::update(double t)
 		}
 	}
 
+	for (auto j : particleGen) {
 
+		std::list<RigidParticle*> aux = j->generateParticles(gPhysics);
+
+		for (auto i : aux) {
+			gScene->addActor(*i->getActor());
+			rigidParticles.push_back(i);
+		}
+
+	}
+}
+
+void WorldManager::deleteGenerators()
+{
+	auto i = particleGen.begin();
+
+	while (i != particleGen.end()) {
+		i = particleGen.erase(i);
+	}
 }
 
 WorldManager::~WorldManager()
