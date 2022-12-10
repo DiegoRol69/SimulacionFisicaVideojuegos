@@ -11,7 +11,7 @@ Proyectile::Proyectile(TipoBala t):Particle()
 	//switch (t)
 	//{
 	//case ARTILLERY:
-	//	setProyectile(posCamera , 40 * camera->getDir(), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(10)));
+	//setProyectile(posCamera , 40 * camera->getDir(), 0.8, Vector3(0, -9.8, 0), 440, CreateShape(physx::PxSphereGeometry(10)));
 	//	break;
 	//	
 	//case PISTOL:

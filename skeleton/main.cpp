@@ -8,6 +8,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "ParticleSys.h"
+#include "WorldManager.h"
 
 #include <iostream>
 
@@ -16,18 +17,20 @@ using namespace physx;
 PxDefaultAllocator		gAllocator;
 PxDefaultErrorCallback	gErrorCallback;
 
-PxFoundation*			gFoundation = NULL;
-PxPhysics*				gPhysics	= NULL;
+PxFoundation* gFoundation = NULL;
+PxPhysics* gPhysics = NULL;
 
 
-PxMaterial*				gMaterial	= NULL;
+PxMaterial* gMaterial = NULL;
 
-PxPvd*                  gPvd        = NULL;
+PxPvd* gPvd = NULL;
 
-PxDefaultCpuDispatcher*	gDispatcher = NULL;
-PxScene*				gScene      = NULL;
+PxDefaultCpuDispatcher* gDispatcher = NULL;
+PxScene* gScene = NULL;
 
-ParticleSys *sysParticle = NULL;
+ParticleSys* sysParticle = NULL;
+
+WorldManager* world = NULL;
 
 ContactReportCallback gContactReportCallback;
 
@@ -41,9 +44,9 @@ void initPhysics(bool interactive)
 
 	gPvd = PxCreatePvd(*gFoundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-	gPvd->connect(*transport,PxPvdInstrumentationFlag::eALL);
+	gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
-	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
+	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
@@ -59,6 +62,10 @@ void initPhysics(bool interactive)
 	sysParticle = new ParticleSys();
 
 	sysParticle->generateFireworkSystem();
+
+	world = new WorldManager(gScene, gPhysics);
+
+	world->createRigidDynamic({ 10,200,10 }, { 0,0,0 }, CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "");
 }
 
 
@@ -72,7 +79,10 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	sysParticle->update(t);
+	if (t < 0.1) {
+		sysParticle->update(t);
+		world->update(t);
+	}
 }
 
 // Function to clean data
@@ -85,11 +95,13 @@ void cleanupPhysics(bool interactive)
 	gScene->release();
 	gDispatcher->release();
 	// -----------------------------------------------------
-	gPhysics->release();	
+	gPhysics->release();
 	PxPvdTransport* transport = gPvd->getTransport();
 	gPvd->release();
 	transport->release();
-	
+
+	delete world;
+
 	gFoundation->release();
 }
 
@@ -98,7 +110,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	switch(toupper(key))
+	Camera* camera_ = GetCamera();
+	Vector3 posCamera = camera_->getTransform().p;
+
+	switch (toupper(key))
 	{
 	case 'G':
 		sysParticle->addGen(Gaussian);
@@ -111,7 +126,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'E':
 		sysParticle->shootFirework(1);
-		break; 
+		break;
 	case 'C':
 		sysParticle->addGen(Circle);
 		break;
@@ -145,15 +160,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'B':
 		sysParticle->Buoyancy();
 		break;
-	/*case 'B':
-		proyectiles.push_back(new Proyectile(TipoBala::ARTILLERY));
+	case 'Z':
+		world->createRigidDynamic(posCamera, 80 * camera_->getDir(), CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "proyectile");
 		break;
-	case 'C':
-		proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
-		break;
-	case 'F':
-		proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
-		break;*/
+		/*case 'C':
+			proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
+			break;
+		case 'F':
+			proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
+			break;*/
 	default:
 		break;
 	}
@@ -163,10 +178,12 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
+
+	world->collisionEfect(actor1, actor2);
 }
 
 
-int main(int, const char*const*)
+int main(int, const char* const*)
 {
 #ifndef OFFLINE_EXECUTION 
 	extern void renderLoop();
@@ -174,7 +191,7 @@ int main(int, const char*const*)
 #else
 	static const PxU32 frameCount = 100;
 	initPhysics(false);
-	for(PxU32 i=0; i<frameCount; i++)
+	for (PxU32 i = 0; i < frameCount; i++)
 		stepPhysics(false);
 	cleanupPhysics(false);
 #endif
