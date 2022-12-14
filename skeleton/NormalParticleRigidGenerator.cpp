@@ -14,7 +14,7 @@ NormalParticleRigidGenerator::NormalParticleRigidGenerator(PxShape* shape_, char
 std::list<RigidParticle*> NormalParticleRigidGenerator::generateParticles(PxPhysics* gPhysics)
 {
     std::uniform_real_distribution<double> generationDistr(0, 1);
-    std::uniform_real_distribution<double> density(1, 1000);
+    std::uniform_real_distribution<double> density(1, 600);
 	std::uniform_real_distribution<double> color(0, 1);
 	std::normal_distribution<> t(mean_t, dev_t);
 
@@ -35,7 +35,6 @@ std::list<RigidParticle*> NormalParticleRigidGenerator::generateParticles(PxPhys
 
 			item = new RenderItem(shape, new_solid, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
 			new_solid->setName(name);
-			if (name == "") new_solid->setName("sinEfecto");
 
 			RigidParticle* rp = new RigidParticle(new_solid, t(gen), item);
 

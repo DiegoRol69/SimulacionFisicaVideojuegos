@@ -8,9 +8,12 @@ RigidParticle::RigidParticle(PxRigidDynamic *solid_, double tiempoVida_, RenderI
 	alive = true;
 }
 
-RigidParticle::~RigidParticle()
+void RigidParticle::integrate(double t)
 {
-	DeregisterRenderItem(item);
+	if (alive) {
+		tiempoVida -= t;
+		if (tiempoVida < 0) alive = false;
+	}
 }
 
 bool RigidParticle::viva()
@@ -23,20 +26,22 @@ void RigidParticle::setAlive(bool state)
 	alive = state;
 }
 
-PxRigidActor *RigidParticle::getActor()
+PxRigidActor* RigidParticle::getActor()
 {
 	return solid;
 }
 
-void RigidParticle::integrate(double t)
+PxRigidDynamic *RigidParticle::getDynamicP()
 {
-	if (alive) {
-		tiempoVida -= t;
-		if (tiempoVida < 0) alive = false;
-	}
+	return solid;
 }
 
 string RigidParticle::getName()
 {
 	return solid->getName();
+}
+
+RigidParticle::~RigidParticle()
+{
+	DeregisterRenderItem(item);
 }

@@ -5,6 +5,7 @@
 #include "RenderUtils.hpp"
 #include "GravityForceGenerator.h"
 #include "BuoyancyForceGenerator.h"
+#include <iostream>
 
 ParticleSys::ParticleSys()
 {
@@ -40,6 +41,7 @@ void ParticleSys::update(double t)
 			++i;
 		}
 	}
+
 
 	FR->updateForces(t);
 
@@ -123,7 +125,9 @@ void ParticleSys::addExplosion()
 	}
 
 	for (auto i : particles) {
-		FR->addRegistry(explosion, i);
+		if (i->viva()) {
+			FR->addRegistry(explosion, i);
+		}
 	}
 }
 
@@ -161,11 +165,22 @@ void ParticleSys::addK()
 
 void ParticleSys::quitRegistry()
 {
-	FR->deleteParticleRegistry(muelle1);
-	FR->addRegistry(fsp1, muelle1);
+	if (fsp1 != nullptr) {
+		FR->deleteParticleRegistry(muelle1);
+		FR->addRegistry(fsp1, muelle1);
+	}
 	if (fsp2 != nullptr) {
 		FR->deleteParticleRegistry(muelle2);
 		FR->addRegistry(fsp2, muelle2);
+	}
+}
+
+void ParticleSys::deleteGenerators()
+{
+	auto i = particleGen.begin();
+
+	while (i != particleGen.end()) {
+		i = particleGen.erase(i);
 	}
 }
 
@@ -198,6 +213,13 @@ void ParticleSys::generateFireworkSystem()
 	shared_ptr <ParticleGenerator> gen2(new GaussianParticleGen(firework_pool[0], 20, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1, randTypeForce));
 	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -2, 0),
 		440, CreateShape(physx::PxSphereGeometry(0.5)), 3, 10, 5, gen2);
+	firework_pool.push_back(fw);
+
+	fw = new FireWork();
+
+	shared_ptr <ParticleGenerator> gen3(new GaussianParticleGen(p, 15, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1, randTypeForce));
+	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -2, 0),
+		440, CreateShape(physx::PxSphereGeometry(0.5)), 1, 10, 5, gen3);
 	firework_pool.push_back(fw);
 
 

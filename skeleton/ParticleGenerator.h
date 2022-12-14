@@ -7,8 +7,7 @@
 #include "WindForceGenerator.h"
 #include "Whirlwind.h"
 #include "Explosion.h"
-
-enum typeF { Gravity, Wind, Whirl, ultimo };
+#include "TipoFuerzas.h"
 
 class ParticleGenerator
 {

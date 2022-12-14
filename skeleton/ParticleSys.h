@@ -39,6 +39,7 @@ public:
 	~ParticleSys() {};
 
 	void update( double t);
+
 	void addGen(TipoGen tipo);
 	void addParticle();
 	void addExplosion();
@@ -47,6 +48,7 @@ public:
 	void addK();
 
 	void quitRegistry();
+	void deleteGenerators();
 
 	void shootFirework(int type);
 	void generateFireworkSystem();

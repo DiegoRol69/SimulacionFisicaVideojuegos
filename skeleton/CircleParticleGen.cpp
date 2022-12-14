@@ -42,6 +42,7 @@ void CircleParticleGen::setForceToClon()
         fg = new Whirlwind(-10, { 15,30,0 });
         break;
     default:
+        fg = new Whirlwind(-10, { 15,30,0 });
         break;
     }
 }

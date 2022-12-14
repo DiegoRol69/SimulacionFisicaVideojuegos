@@ -257,6 +257,7 @@
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="CircleParticleGen.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="FireWork.cpp" />
     <ClCompile Include="GaussianParticleGen.cpp" />
@@ -270,6 +271,7 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="RigidExplosion.cpp" />
     <ClCompile Include="RigidParticle.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
     <ClCompile Include="UniformParticleGen.cpp" />
@@ -283,6 +285,7 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="CircleParticleGen.h" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FireWork.h" />
     <ClInclude Include="ForceGenerator.h" />
@@ -299,8 +302,13 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="RigidExplosion.h" />
+    <ClInclude Include="RigidForceGenerator.h" />
     <ClInclude Include="RigidParticle.h" />
+    <ClInclude Include="RigidParticleForceRegistry.h" />
+    <ClInclude Include="RigidParticlesNamesManager.h" />
     <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="TipoFuerzas.h" />
     <ClInclude Include="TipoGenerador.h" />
     <ClInclude Include="UniformParticleGen.h" />
     <ClInclude Include="Whirlwind.h" />

@@ -25,6 +25,13 @@ public:
 		RegisterRenderItem(this);
 	}
 
+	RenderItem(physx::PxShape* _shape, const physx::PxRigidActor* _actor, const physx::PxTransform* _trans, const Vector4& _color) :
+		shape(_shape), transform(_trans), actor(_actor), color(_color), references(1)
+	{
+		shape->acquireReference();
+		RegisterRenderItem(this);
+	}
+
 	RenderItem(physx::PxShape* _shape, const physx::PxRigidActor* _actor, const Vector4& _color) :
 		shape(_shape), transform(NULL), actor(_actor), color(_color), references(1)
 	{

@@ -65,7 +65,7 @@ void initPhysics(bool interactive)
 
 	world = new WorldManager(gScene, gPhysics);
 
-	world->createRigidDynamic({ 10,200,10 }, { 0,0,0 }, CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "");
+	//world->createRigidDynamic({ 10,200,10 }, { 0,0,0 }, CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "");
 }
 
 
@@ -78,9 +78,9 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+	sysParticle->update(t);
 
 	if (t < 0.1) {
-		sysParticle->update(t);
 		world->update(t);
 	}
 }
@@ -115,6 +115,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch (toupper(key))
 	{
+	 //PARTICULAS NO FISICAS
 	case 'G':
 		sysParticle->addGen(Gaussian);
 		break;
@@ -135,6 +136,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'X':
 		sysParticle->addExplosion();
+		//world->addForce(Expl);
 		break;
 	case 'H':
 		sysParticle->addWind();
@@ -160,23 +162,17 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'B':
 		sysParticle->Buoyancy();
 		break;
-	//case 'Z':
-	//	world->createRigidDynamic(posCamera, 80 * camera_->getDir(), CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "proyectile");
-	//	break;
+	//PARTICULAS FISICAS
+	case 'R':
+		world->createRigidDynamic(posCamera, 80 * camera_->getDir(), 
+			CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, BalaFA, 0);
+		break;
 	case 'Z':
 		world->deleteGenerators();
+		sysParticle->deleteGenerators();
 		break;
 	case '1':
-		world->addGen(Standard);
-		break;
-	
-	/*case 'C':
-		proyectiles.push_back(new Proyectile(TipoBala::PISTOL));
-		break;
-	case 'F':
-		proyectiles.push_back(new Proyectile(TipoBala::FIREBALL));
-		break;*/
-	default:
+		world->addGen(Standard, SinEfecto);
 		break;
 	}
 }

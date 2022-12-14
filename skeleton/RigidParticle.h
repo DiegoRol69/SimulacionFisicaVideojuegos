@@ -17,10 +17,11 @@ public:
 	~RigidParticle();
 
 	PxRigidActor* getActor();
+	PxRigidDynamic *getDynamicP();
 
 	bool viva();
 	void setAlive(bool state);
-	void integrate(double t);
+	virtual void integrate(double t);
 	string getName();
 
 private:

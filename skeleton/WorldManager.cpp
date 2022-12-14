@@ -19,11 +19,16 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_) {
 	Pared->setName("sinEfecto");
 	gScene->addActor(*Pared);
 
+	RFR = new RigidParticleForceRegistry();
+	NM = new RigidParticlesNamesManager();
+
+	contTimeGen = 0;
+	genTime = 0.5;
 }
 
-void WorldManager::createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, double density, Vector4 color, char* name)
+void WorldManager::createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, double density,
+	Vector4 color, names nm, double mass)
 {
-
 	PxRigidDynamic* new_solid;
 
 	new_solid = gPhysics->createRigidDynamic(PxTransform(pos));
@@ -32,50 +37,50 @@ void WorldManager::createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, 
 	new_solid->attachShape(*shape);
 	PxRigidBodyExt::setMassAndUpdateInertia(*new_solid, density);
 	item = new RenderItem(shape, new_solid, color);
-	new_solid->setName(name);
-	if (name == "") new_solid->setName("sinEfecto");
+	new_solid->setName(NM->enumToName(nm));
 	gScene->addActor(*new_solid);
 
 	RigidParticle* rp = new RigidParticle(new_solid, 10, item);
 
 	rigidParticles.push_back(rp);
-
 }
 
-void WorldManager::collisionEfect(PxActor* actor1, PxActor* actor2)
+void WorldManager::collisionEfect(PxActor* actor1_, PxActor* actor2_)
 {
-
 	PxRigidActor* actor;
+	RigidParticle* particula1 = nullptr;
+	RigidParticle* particula2 = nullptr;
 
 	auto i = rigidParticles.begin();
 
-	while (i != rigidParticles.end()) {
+	while ((particula1 == nullptr || particula2 == nullptr) && i != rigidParticles.end()) {
 
 		actor = (*i)->getActor();
 
-		if (actor == actor1) {
-			//(*i)->setAlive(false);
+		if (actor == actor1_) {
+			particula1 = (*i);
 		}
 
-		if (actor == actor2) {
-			//v[1] = (*i);
+		if (actor == actor2_) {
+			particula2 = (*i);
 		}
 
 		++i;
 
 	}
+
 }
 
-void WorldManager::addGen(TipoGen tipo)
+void WorldManager::addGen(TipoGen tipoGen, names nm)
 {
 	ParticleRigidGenerator* generator;
 	std::uniform_real_distribution<double> radius(0.2, 2);
 
 	std::uniform_real_distribution<PxReal> size(0.2, 2);
 
-	PxMaterial* gMaterial = gPhysics->createMaterial(2.5f, 2.5f, 4.6f);
+	PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
-	switch (tipo)
+	switch (tipoGen)
 	{
 	case Gaussian:
 		break;
@@ -84,13 +89,40 @@ void WorldManager::addGen(TipoGen tipo)
 	case Circle:
 		break;
 	case Standard:
-		generator = new NormalParticleRigidGenerator(CreateShape(PxBoxGeometry(size(gen), size(gen), size(gen)), gMaterial), 
-			"sinEfecto", 1, 0.8, 1, 9);
+		generator = new NormalParticleRigidGenerator(CreateShape(PxBoxGeometry(size(gen), size(gen), size(gen)), gMaterial),
+			NM->enumToName(nm), 1, 0.8, 1, 9);
 		generator->setMeans({ 0,100,0 }, { 0,-4,0 });
 		break;
 	}
 
 	particleGen.push_back(generator);
+}
+
+void WorldManager::addForce(typeF tipoF)
+{
+
+	RigidForceGenerator* FG;
+
+	if (rigidParticles.size() > 0) {
+		switch (tipoF)
+		{
+		case Gravity:
+			break;
+		case Wind:
+			break;
+		case Whirl:
+			break;
+		case Expl:
+			rExplosion = new RigidExplosion(1000000, 200, 100, { 0, 0, 0 });
+			FG = rExplosion;
+			break;
+		}
+
+		for (auto i : rigidParticles) {
+			RFR->addRegistry(FG, i);
+		}
+	}
+
 }
 
 void WorldManager::update(double t)
@@ -102,6 +134,7 @@ void WorldManager::update(double t)
 		(*i)->integrate(t);
 
 		if (!(*i)->viva()) {
+			RFR->deleteParticleRegistry(*i);
 			delete (*i);
 			i = rigidParticles.erase(i);
 		}
@@ -111,16 +144,25 @@ void WorldManager::update(double t)
 		}
 	}
 
-	for (auto j : particleGen) {
+	contTimeGen += t;
+	if (contTimeGen >= genTime) {
+		for (auto j : particleGen) {
 
-		std::list<RigidParticle*> aux = j->generateParticles(gPhysics);
+			std::list<RigidParticle*> aux = j->generateParticles(gPhysics);
 
-		for (auto i : aux) {
-			gScene->addActor(*i->getActor());
-			rigidParticles.push_back(i);
+			for (auto i : aux) {
+				gScene->addActor(*i->getActor());
+				rigidParticles.push_back(i);
+			}
+
 		}
 
+		contTimeGen = 0;
 	}
+
+	RFR->updateForces(t);
+
+	if (rExplosion != nullptr) rExplosion->addConst(t);
 }
 
 void WorldManager::deleteGenerators()
@@ -134,11 +176,9 @@ void WorldManager::deleteGenerators()
 
 WorldManager::~WorldManager()
 {
-
 	auto i = rigidParticles.begin();
 
 	while (i != rigidParticles.end()) {
 		i = rigidParticles.erase(i);
 	}
-
 }

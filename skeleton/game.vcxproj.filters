@@ -28,6 +28,8 @@
     <ClCompile Include="WorldManager.cpp" />
     <ClCompile Include="RigidParticle.cpp" />
     <ClCompile Include="NormalParticleRigidGenerator.cpp" />
+    <ClCompile Include="RigidExplosion.cpp" />
+    <ClCompile Include="Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -62,6 +64,12 @@
     <ClInclude Include="ParticleRigidGenerator.h" />
     <ClInclude Include="NormalParticleRigidGenerator.h" />
     <ClInclude Include="TipoGenerador.h" />
+    <ClInclude Include="RigidForceGenerator.h" />
+    <ClInclude Include="RigidParticleForceRegistry.h" />
+    <ClInclude Include="RigidExplosion.h" />
+    <ClInclude Include="TipoFuerzas.h" />
+    <ClInclude Include="RigidParticlesNamesManager.h" />
+    <ClInclude Include="Enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

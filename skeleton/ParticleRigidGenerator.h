@@ -14,7 +14,7 @@ protected:
 	PxShape* shape;
 	RenderItem* item;
 	
-	double _generation_probability, mean_t;
+	double _generation_probability, mean_t, mass;
 	int num_particles;
 	char* name;
 

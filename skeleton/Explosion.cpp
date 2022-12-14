@@ -32,14 +32,6 @@ void Explosion::updateForce(Particle* particle, double t)
 		explosionDir = a* Vector3(particlePos.x - explosionPos.x, particlePos.y - explosionPos.y, particlePos.z - explosionPos.z) * b;
 	}
 
-	//Vector3  resta = particle->getProperties().vel - explosionDir;
-
-	//float drag_coef = resta.normalize();
-
-	//drag_coef = K * drag_coef + K * drag_coef * drag_coef;
-
-	//explosionF = -resta * drag_coef;
-
 	particle->addForce(explosionDir * particle->getProperties().masa);
 }
 
