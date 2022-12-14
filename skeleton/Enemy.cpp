@@ -6,7 +6,9 @@ Enemy::Enemy(PxRigidDynamic* solid_, double tiempoVida_, RenderItem* item_):Rigi
 
 	head = new RenderItem(CreateShape(PxSphereGeometry(0.5)), solid_, &p, {1.0,0.0,0.0, 1.0});
 
-	body = new RenderItem(CreateShape(PxSphereGeometry(1.5)), solid_, {1.0,0.0,0.0, 1.0});
+	p.p.y = solid_->getGlobalPose().p.y - 50;
+
+	body = new RenderItem(CreateShape(PxSphereGeometry(1.5)), solid_, &p, {1.0,0.0,0.0, 1.0});
 
 }
 
