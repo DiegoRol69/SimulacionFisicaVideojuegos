@@ -9,13 +9,13 @@ RigidParticle::RigidParticle(PxRigidDynamic* solid_, double tiempoVida_, bool de
 	alive = true;
 }
 
-//RigidParticle::RigidParticle(PxRigidStatic* solid_, bool destroyable_, RenderItem* item_)
-//{
-//	destroyable = destroyable_;
-//	solidStatic = solid_;
-//	item = item_;
-//	alive = true;
-//}
+RigidParticle::RigidParticle(PxRigidStatic* solid_, bool destroyable_, RenderItem* item_)
+{
+	destroyable = destroyable_;
+	solidStatic = solid_;
+	item = item_;
+	alive = true;
+}
 
 void RigidParticle::integrate(double t)
 {
@@ -58,6 +58,16 @@ string RigidParticle::getName()
 	if (solidDynamic != nullptr) name = solidDynamic->getName();
 	else name = solidStatic->getName();
 
+	return name;
+}
+
+void RigidParticle::setTypeName(names nm)
+{
+	name = nm;
+}
+
+names RigidParticle::getTypeName()
+{
 	return name;
 }
 

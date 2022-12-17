@@ -13,7 +13,7 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_, ParticleSys* 
 	Suelo->setName("sinEfecto");
 	gScene->addActor(*Suelo);
 
-	//RigidParticle* suelo = new RigidParticle(Suelo, false, item);
+	RigidParticle* suelo = new RigidParticle(Suelo, false, item);
 
 	PxRigidStatic* Pared = gPhysics->createRigidStatic(PxTransform({ 10 , 10, -30 }));
 	PxShape* shape_suelo = CreateShape(PxBoxGeometry(40, 20, 5));
@@ -22,13 +22,11 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_, ParticleSys* 
 	Pared->setName("sinEfecto");
 	gScene->addActor(*Pared);
 
-	//RigidParticle* pared = new RigidParticle(Pared, false, item);
+	RigidParticle* pared = new RigidParticle(Pared, false, item);
 
-	//rigidParticles.push_back(suelo);
-	//rigidParticles.push_back(pared);
+	rigidParticles.push_back(suelo);
+	rigidParticles.push_back(pared);
 	
-
-	//arreglar colisiones con statics
 	//generar un spawn enemies
 	//hacer que los fireworks/generadores aparezcan donde muere el solido rigido
 
@@ -79,7 +77,7 @@ void WorldManager::addGen(TipoGen tipoGen, names nm)
 	case Standard:
 		//CreateShape(PxBoxGeometry(size(gen), size(gen), size(gen))
 		generator = new NormalParticleRigidGenerator(CreateShape(PxSphereGeometry(5), gMaterial),
-			NM->enumToName(nm), 1, 0.8, 1, 9);
+			nm, 1, 0.8, 1, 9);
 		generator->setMeans({ 0,100,0 }, { 0,-4,0 });
 		break;
 	}
@@ -102,6 +100,7 @@ void WorldManager::shootProyectile(Vector3 pos, Vector3 vel, PxShape* shape, dou
 	gScene->addActor(*new_solid);
 
 	Proyectile* rp = new Proyectile(new_solid, 10, true, item);
+	rp->setTypeName(nm);
 
 	rigidParticles.push_back(rp);
 }
@@ -127,7 +126,7 @@ void WorldManager::addForce(typeF tipoF)
 		}
 
 		for (auto i : rigidParticles) {
-			RFR->addRegistry(FG, i);
+			if(i->getDynamicP() != nullptr) RFR->addRegistry(FG, i);
 		}
 	}
 
@@ -158,8 +157,8 @@ void WorldManager::collisionEfect(PxActor* actor1_, PxActor* actor2_)
 
 	}
 
-	particula1->onCollision(Enem, pSys);
-	//particula2->onCollision(Enem, pSys);
+	particula1->onCollision(particula2->getTypeName(), pSys);
+	particula2->onCollision(particula1->getTypeName(), pSys);
 
 }
 

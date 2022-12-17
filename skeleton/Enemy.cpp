@@ -20,9 +20,14 @@ void Enemy::integrate(double t) {
 	pb = PxTransform(solid_->getGlobalPose().p.x, solid_->getGlobalPose().p.y, solid_->getGlobalPose().p.z);
 }
 
-void Enemy::onCollision(names mn, ParticleSys* pSys) {
+void Enemy::onCollision(names nm, ParticleSys* pSys) {
 
-	setAlive(false);
+	if(nm == BalaFA)lives--;
+
+	if (lives == 0) {
+		setAlive(false);
+		pSys->addGenInPos(Circle, getDynamicP()->getGlobalPose().p);
+	}
 }
 
 Enemy::~Enemy() {

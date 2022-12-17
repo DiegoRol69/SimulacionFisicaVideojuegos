@@ -14,6 +14,6 @@ Proyectile::~Proyectile()
 }
 
 void Proyectile::onCollision(names mn, ParticleSys* pSys) {
-	pSys->shootFirework(2);
+	pSys->generateFireworkInPos(getDynamicP()->getGlobalPose().p);
 	setAlive(false);
 }

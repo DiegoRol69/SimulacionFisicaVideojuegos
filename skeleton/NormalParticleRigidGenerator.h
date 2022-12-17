@@ -8,7 +8,7 @@ class NormalParticleRigidGenerator :public ParticleRigidGenerator
 
 public:
 
-	NormalParticleRigidGenerator(PxShape* shape_, char* name_, int n, double _generation_probability_, 
+	NormalParticleRigidGenerator(PxShape* shape_, names name_, int n, double _generation_probability_, 
 		double dev_t_, double mean_t_);
 	~NormalParticleRigidGenerator() {};
 

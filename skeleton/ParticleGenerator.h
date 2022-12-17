@@ -26,7 +26,7 @@ protected:
 	std::mt19937 gen{ rd() };
 	
 	typeF tipoF;
-	ForceGenerator* fg;
+	ForceGenerator* fg = nullptr;
 
 public:
 

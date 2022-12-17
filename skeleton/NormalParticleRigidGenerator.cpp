@@ -1,6 +1,6 @@
 #include "NormalParticleRigidGenerator.h"
 
-NormalParticleRigidGenerator::NormalParticleRigidGenerator(PxShape* shape_, char *name_, int n, 
+NormalParticleRigidGenerator::NormalParticleRigidGenerator(PxShape* shape_, names name_, int n, 
 	double _generation_probability_, double dev_t_, double mean_t_)
 {
 	shape = shape_;
@@ -34,9 +34,9 @@ std::list<RigidParticle*> NormalParticleRigidGenerator::generateParticles(PxPhys
 			PxRigidBodyExt::setMassAndUpdateInertia(*new_solid, density(gen));
 
 			item = new RenderItem(shape, new_solid, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
-			new_solid->setName(name);
 
 			Enemy * rp = new Enemy(new_solid, t(gen), item);
+			rp->setTypeName(name);
 
 			particles.push_back(rp);
         }

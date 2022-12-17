@@ -17,4 +17,5 @@ private:
 	PxTransform pb;
 	PxTransform ph;
 
+	int lives = 3;
 };

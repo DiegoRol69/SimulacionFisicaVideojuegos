@@ -16,7 +16,7 @@ class RigidParticle
 public:
 
 	RigidParticle(PxRigidDynamic *solid_, double tiempoVida_, bool destroyable, RenderItem *item_);
-	//RigidParticle(PxRigidStatic *solid_, bool destroyable, RenderItem *item_);
+	RigidParticle(PxRigidStatic *solid_, bool destroyable, RenderItem *item_);
 	virtual ~RigidParticle();
 
 	virtual void integrate(double t);
@@ -28,12 +28,16 @@ public:
 	PxRigidDynamic* getDynamicP();
 	PxRigidStatic* getStaticP();
 	string getName();
+	void setTypeName(names nm);
+	names getTypeName();
 
 private:
 
 	PxRigidDynamic* solidDynamic = nullptr;
 	PxRigidStatic* solidStatic = nullptr;
 	RenderItem *item;
+
+	names name;
 	
 	double tiempoVida;
 

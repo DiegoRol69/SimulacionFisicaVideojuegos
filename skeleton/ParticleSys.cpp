@@ -52,7 +52,7 @@ void ParticleSys::update(double t)
 		std::list<Particle*> aux = j->generateParticles();
 
 		for (auto i : aux) {
-			FR->addRegistry(j->getTypeF(), i);
+			if(j->getTypeF() != nullptr)FR->addRegistry(j->getTypeF(), i);
 			particles.push_back(i);
 		}
 
@@ -93,6 +93,39 @@ void ParticleSys::addGen(TipoGen tipo)
 
 	particleGen.push_back(gen);
 
+}
+
+void ParticleSys::addGenInPos(TipoGen tipo, Vector3 pos)
+{
+	Camera* camera = GetCamera();
+	Particle* p = new Particle();
+
+	ParticleGenerator* gen;
+	double radius = 0.3;
+
+	switch (tipo)
+	{
+	case Gaussian:
+		p->setParticle(Vector3(0,0,0), Vector3(0,0,0), 0.8, Vector3(0, 0, 0), 10, 
+			CreateShape(physx::PxSphereGeometry(radius)), 100, Vector3(15, 40, 0), Vector3(60,60,60), false, false, radius);
+		gen = new GaussianParticleGen(p, 5, Vector3(0.1, 0.1, 10), Vector3(0.1, 0.1, 0.1), 0.8, 1, ultimo);
+		gen->setMeans(Vector3(15, 40, 0), camera->getDir() * (-10));
+		break;
+	case Uniform:
+		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 440, 
+			CreateShape(physx::PxSphereGeometry(radius)), 50, Vector3(0, 40, 0), Vector3(10, 15, 10), false, false, radius);
+		gen = new UniformParticleGen(p, 10, 0.1, Vector3(10, 10, 10), Vector3(3, 3, 3), ultimo);
+		gen->setMeans(Vector3(15, 30, 0), Vector3(0, 0, 0));
+		break;
+	case Circle:
+		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10, 
+			CreateShape(physx::PxSphereGeometry(radius)), 3, Vector3(5, 5, 5), Vector3(50, 50, 50), false, true, radius);
+		gen = new CircleParticleGen(p, 1, 0.8, 20, FunteAgua, ultimo);
+		gen->setMeans(pos, Vector3(0, 0, 0));
+		break;
+	}
+
+	particleGen.push_back(gen);
 }
 
 void ParticleSys::addParticle()
@@ -221,6 +254,23 @@ void ParticleSys::generateFireworkSystem()
 	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -2, 0),
 		440, CreateShape(physx::PxSphereGeometry(0.5)), 0.5, 10, 5, gen3);
 	firework_pool.push_back(fw);
+}
+
+void ParticleSys::generateFireworkInPos(Vector3 pos)
+{
+	Particle* p = new Particle();
+	FireWork* fw = new FireWork();
+
+	p->setParticle(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -9.8, 0), 440,
+		CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(15, 40, 0), Vector3(1000, 1000, 1000), false, false, 0.5);
+
+	shared_ptr <ParticleGenerator> gen(new GaussianParticleGen(p, 15, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1, ultimo));
+	fw->setFireWork(pos, Vector3(0, 0, 0), 0.8, Vector3(0, -2, 0),
+		440, CreateShape(physx::PxSphereGeometry(0.5)), 0.0, 10, 5, gen);
+	
+	fw->setFireWork(fw);
+
+	particles.push_back(fw);
 }
 
 void ParticleSys::Spring()

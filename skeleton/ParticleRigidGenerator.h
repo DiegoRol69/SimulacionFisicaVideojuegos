@@ -17,7 +17,7 @@ protected:
 	
 	double _generation_probability, mean_t, mass;
 	int num_particles;
-	char* name;
+	names name;
 
 	std::random_device rd{};
 	std::mt19937 gen{ rd() };

@@ -41,6 +41,7 @@ public:
 	void update( double t);
 
 	void addGen(TipoGen tipo);
+	void addGenInPos(TipoGen tipo, Vector3 pos);
 	void addParticle();
 	void addExplosion();
 	void addWind();
@@ -52,6 +53,7 @@ public:
 
 	void shootFirework(int type);
 	void generateFireworkSystem();
+	void generateFireworkInPos(Vector3 pos);
 	void Spring();
 	void Anchored();
 	void Slinky();
