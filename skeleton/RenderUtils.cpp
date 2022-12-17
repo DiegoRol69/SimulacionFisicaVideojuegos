@@ -12,10 +12,13 @@ extern void initPhysics(bool interactive);
 extern void stepPhysics(bool interactive, double t);	
 extern void cleanupPhysics(bool interactive);
 extern void keyPress(unsigned char key, const PxTransform& camera);
+extern void mousePress(int x, int y, const PxTransform& camera);
 extern PxPhysics* gPhysics;
 extern PxMaterial* gMaterial;
 
 std::vector<const RenderItem*> gRenderItems;
+
+bool cursorVisible = false;
 
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
@@ -50,6 +53,7 @@ namespace
 void motionCallback(int x, int y)
 {
 	sCamera->handleMotion(x, y);
+	//
 }
 
 void keyboardCallback(unsigned char key, int x, int y)
@@ -64,6 +68,14 @@ void keyboardCallback(unsigned char key, int x, int y)
 void mouseCallback(int button, int state, int x, int y)
 {
 	sCamera->handleMouse(button, state, x, y);
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) mousePress(x, y, sCamera->getTransform());
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+		
+		cursorVisible = !cursorVisible;
+
+		ShowCursor(cursorVisible);
+		glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
+	}
 }
 
 void idleCallback()
@@ -139,6 +151,8 @@ void renderLoop()
 	StartCounter();
 	sCamera = new Camera(PxVec3(50.0f, 50.0f, 50.0f), PxVec3(-0.6f,-0.2f,-0.7f));
 
+	ShowCursor(cursorVisible);
+
 	setupDefaultWindow("Simulacion Fisica Videojuegos");
 	setupDefaultRenderState();
 
@@ -146,7 +160,8 @@ void renderLoop()
 	glutDisplayFunc(renderCallback);
 	glutKeyboardFunc(keyboardCallback);
 	glutMouseFunc(mouseCallback);
-	glutMotionFunc(motionCallback);
+	//glutMotionFunc(motionCallback);
+	glutPassiveMotionFunc(motionCallback);
 	motionCallback(0,0);
 
 	atexit(exitCallback);

@@ -4,6 +4,7 @@
 #include <list>
 #include <random>
 #include "RigidParticle.h"
+#include "Enemy.h"
 
 class ParticleRigidGenerator
 {

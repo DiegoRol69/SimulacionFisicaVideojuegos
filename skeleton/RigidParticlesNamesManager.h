@@ -1,6 +1,5 @@
 #pragma once
-
-enum names{SinEfecto, BalaFA, ult};
+#include "RigidParticlesNames.h"
 
 class RigidParticlesNamesManager
 {
@@ -17,6 +16,9 @@ public:
 			break;
 		case BalaFA:
 			name = "BalaFA";
+			break;
+		case Enem:
+			name = "Enemy";
 			break;
 		}
 

@@ -70,6 +70,7 @@
     <ClInclude Include="TipoFuerzas.h" />
     <ClInclude Include="RigidParticlesNamesManager.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="RigidParticlesNames.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

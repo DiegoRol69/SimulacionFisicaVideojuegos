@@ -1,12 +1,14 @@
 #pragma once
-#include "Particle.h"
+#include "RigidParticle.h"
 
 enum TipoBala {PISTOL, ARTILLERY, FIREBALL};
 
-class Proyectile : public Particle
+class Proyectile : public RigidParticle
 {
 public:
-	Proyectile(TipoBala t);
-	~Proyectile() {};
+	Proyectile(PxRigidDynamic* solid_, double tiempoVida, bool destroyable, RenderItem* item);
+	~Proyectile();
+
+	void onCollision(names mn, ParticleSys* pSys) override;
 };
 

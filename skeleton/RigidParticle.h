@@ -1,9 +1,11 @@
 #pragma once
-#include "RenderUtils.hpp"
 #include <PxPhysicsAPI.h>
-#include "core.hpp"
 #include <iostream>
 #include <string>
+#include "RenderUtils.hpp"
+#include "core.hpp"
+#include "RigidParticlesNames.h"
+#include "ParticleSys.h"
 
 using namespace physx;
 using namespace std;
@@ -13,23 +15,30 @@ class RigidParticle
 	
 public:
 
-	RigidParticle(PxRigidDynamic *solid_, double tiempoVida_, RenderItem *item_);
-	~RigidParticle();
+	RigidParticle(PxRigidDynamic *solid_, double tiempoVida_, bool destroyable, RenderItem *item_);
+	//RigidParticle(PxRigidStatic *solid_, bool destroyable, RenderItem *item_);
+	virtual ~RigidParticle();
 
-	PxRigidActor* getActor();
-	PxRigidDynamic *getDynamicP();
-
+	virtual void integrate(double t);
 	bool viva();
 	void setAlive(bool state);
-	virtual void integrate(double t);
+	virtual void onCollision(names mn, ParticleSys *pSys) {};
+
+	PxActor* getActor();
+	PxRigidDynamic* getDynamicP();
+	PxRigidStatic* getStaticP();
 	string getName();
 
 private:
 
-	PxRigidDynamic* solid;
-	double tiempoVida;
+	PxRigidDynamic* solidDynamic = nullptr;
+	PxRigidStatic* solidStatic = nullptr;
 	RenderItem *item;
+	
+	double tiempoVida;
+
 	bool alive;
+	bool destroyable;
 
 };
 

@@ -1,16 +1,25 @@
 #include "RigidParticle.h"
 
-RigidParticle::RigidParticle(PxRigidDynamic *solid_, double tiempoVida_, RenderItem *item_)
+RigidParticle::RigidParticle(PxRigidDynamic* solid_, double tiempoVida_, bool destroyable_, RenderItem* item_)
 {
 	tiempoVida = tiempoVida_;
-	solid = solid_;
+	destroyable = destroyable_;
+	solidDynamic = solid_;
 	item = item_;
 	alive = true;
 }
 
+//RigidParticle::RigidParticle(PxRigidStatic* solid_, bool destroyable_, RenderItem* item_)
+//{
+//	destroyable = destroyable_;
+//	solidStatic = solid_;
+//	item = item_;
+//	alive = true;
+//}
+
 void RigidParticle::integrate(double t)
 {
-	if (alive) {
+	if (alive && destroyable) {
 		tiempoVida -= t;
 		if (tiempoVida < 0) alive = false;
 	}
@@ -26,22 +35,35 @@ void RigidParticle::setAlive(bool state)
 	alive = state;
 }
 
-PxRigidActor* RigidParticle::getActor()
+PxActor* RigidParticle::getActor()
 {
-	return solid;
+	if (solidDynamic != nullptr) return solidDynamic;
+	else return solidStatic;
 }
 
-PxRigidDynamic *RigidParticle::getDynamicP()
+PxRigidDynamic* RigidParticle::getDynamicP()
 {
-	return solid;
+	return solidDynamic;
+}
+
+PxRigidStatic* RigidParticle::getStaticP()
+{
+	return solidStatic;
 }
 
 string RigidParticle::getName()
 {
-	return solid->getName();
+	string name;
+
+	if (solidDynamic != nullptr) name = solidDynamic->getName();
+	else name = solidStatic->getName();
+
+	return name;
 }
 
 RigidParticle::~RigidParticle()
 {
-	DeregisterRenderItem(item);
+	if (item != nullptr) {
+		DeregisterRenderItem(item);
+	}
 }

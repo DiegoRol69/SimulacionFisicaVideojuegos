@@ -306,6 +306,7 @@
     <ClInclude Include="RigidForceGenerator.h" />
     <ClInclude Include="RigidParticle.h" />
     <ClInclude Include="RigidParticleForceRegistry.h" />
+    <ClInclude Include="RigidParticlesNames.h" />
     <ClInclude Include="RigidParticlesNamesManager.h" />
     <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="TipoFuerzas.h" />

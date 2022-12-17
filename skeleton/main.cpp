@@ -9,6 +9,7 @@
 #include "callbacks.hpp"
 #include "ParticleSys.h"
 #include "WorldManager.h"
+#include "RigidParticle.h"
 
 #include <iostream>
 
@@ -60,12 +61,9 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	sysParticle = new ParticleSys();
-
 	sysParticle->generateFireworkSystem();
 
-	world = new WorldManager(gScene, gPhysics);
-
-	//world->createRigidDynamic({ 10,200,10 }, { 0,0,0 }, CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, "");
+	world = new WorldManager(gScene, gPhysics, sysParticle);
 }
 
 
@@ -105,6 +103,17 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 }
 
+void mousePress(int x, int y, const PxTransform& camera) {
+	PX_UNUSED(camera);
+
+	Camera* camera_ = GetCamera();
+	Vector3 posCamera = camera_->getTransform().p;
+
+	world->shootProyectile(posCamera, 80 * camera_->getDir(),
+		CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, BalaFA);
+
+}
+
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
 {
@@ -136,7 +145,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'X':
 		sysParticle->addExplosion();
-		//world->addForce(Expl);
+		world->addForce(Expl);
 		break;
 	case 'H':
 		sysParticle->addWind();
@@ -164,15 +173,16 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	//PARTICULAS FISICAS
 	case 'R':
-		world->createRigidDynamic(posCamera, 80 * camera_->getDir(), 
-			CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, BalaFA, 0);
+		//posCamera, 80 * camera_->getDir()
+		world->createRigidDynamic({0,100,0}, {0,0,0},
+			CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, Enem);
 		break;
 	case 'Z':
 		world->deleteGenerators();
 		sysParticle->deleteGenerators();
 		break;
 	case '1':
-		world->addGen(Standard, SinEfecto);
+		world->addGen(Standard, Enem);
 		break;
 	}
 }

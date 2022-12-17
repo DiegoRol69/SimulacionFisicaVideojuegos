@@ -1,9 +1,10 @@
 #include "WorldManager.h"
 
-WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_) {
+WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_, ParticleSys* pSys_) {
 
 	gScene = gScene_;
 	gPhysics = gPhysics_;
+	pSys = pSys_;
 
 	PxRigidStatic* Suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
 	PxShape* shape = CreateShape(PxBoxGeometry(100, 0.1, 100));
@@ -12,6 +13,8 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_) {
 	Suelo->setName("sinEfecto");
 	gScene->addActor(*Suelo);
 
+	//RigidParticle* suelo = new RigidParticle(Suelo, false, item);
+
 	PxRigidStatic* Pared = gPhysics->createRigidStatic(PxTransform({ 10 , 10, -30 }));
 	PxShape* shape_suelo = CreateShape(PxBoxGeometry(40, 20, 5));
 	Pared->attachShape(*shape_suelo);
@@ -19,15 +22,26 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_) {
 	Pared->setName("sinEfecto");
 	gScene->addActor(*Pared);
 
+	//RigidParticle* pared = new RigidParticle(Pared, false, item);
+
+	//rigidParticles.push_back(suelo);
+	//rigidParticles.push_back(pared);
+	
+
+	//arreglar colisiones con statics
+	//generar un spawn enemies
+	//hacer que los fireworks/generadores aparezcan donde muere el solido rigido
+
+
 	RFR = new RigidParticleForceRegistry();
 	NM = new RigidParticlesNamesManager();
 
 	contTimeGen = 0;
-	genTime = 0.5;
+	genTime = 1;
 }
 
 void WorldManager::createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, double density,
-	Vector4 color, names nm, double mass)
+	Vector4 color, names nm)
 {
 	PxRigidDynamic* new_solid;
 
@@ -40,35 +54,9 @@ void WorldManager::createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, 
 	new_solid->setName(NM->enumToName(nm));
 	gScene->addActor(*new_solid);
 
-	RigidParticle* rp = new RigidParticle(new_solid, 10, item);
+	RigidParticle* rp = new RigidParticle(new_solid, 10, true, item);
 
 	rigidParticles.push_back(rp);
-}
-
-void WorldManager::collisionEfect(PxActor* actor1_, PxActor* actor2_)
-{
-	PxRigidActor* actor;
-	RigidParticle* particula1 = nullptr;
-	RigidParticle* particula2 = nullptr;
-
-	auto i = rigidParticles.begin();
-
-	while ((particula1 == nullptr || particula2 == nullptr) && i != rigidParticles.end()) {
-
-		actor = (*i)->getActor();
-
-		if (actor == actor1_) {
-			particula1 = (*i);
-		}
-
-		if (actor == actor2_) {
-			particula2 = (*i);
-		}
-
-		++i;
-
-	}
-
 }
 
 void WorldManager::addGen(TipoGen tipoGen, names nm)
@@ -78,7 +66,7 @@ void WorldManager::addGen(TipoGen tipoGen, names nm)
 
 	std::uniform_real_distribution<PxReal> size(0.2, 2);
 
-	PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+	PxMaterial* gMaterial = gPhysics->createMaterial(0.2f, 0.2f, 0.3f);
 
 	switch (tipoGen)
 	{
@@ -89,13 +77,33 @@ void WorldManager::addGen(TipoGen tipoGen, names nm)
 	case Circle:
 		break;
 	case Standard:
-		generator = new NormalParticleRigidGenerator(CreateShape(PxBoxGeometry(size(gen), size(gen), size(gen)), gMaterial),
+		//CreateShape(PxBoxGeometry(size(gen), size(gen), size(gen))
+		generator = new NormalParticleRigidGenerator(CreateShape(PxSphereGeometry(5), gMaterial),
 			NM->enumToName(nm), 1, 0.8, 1, 9);
 		generator->setMeans({ 0,100,0 }, { 0,-4,0 });
 		break;
 	}
 
 	particleGen.push_back(generator);
+}
+
+void WorldManager::shootProyectile(Vector3 pos, Vector3 vel, PxShape* shape, double density,
+	Vector4 color, names nm)
+{
+	PxRigidDynamic* new_solid;
+
+	new_solid = gPhysics->createRigidDynamic(PxTransform(pos));
+	new_solid->setLinearVelocity(vel);
+	new_solid->setAngularVelocity({ 0,0,0 });
+	new_solid->attachShape(*shape);
+	PxRigidBodyExt::setMassAndUpdateInertia(*new_solid, density);
+	item = new RenderItem(shape, new_solid, color);
+	new_solid->setName(NM->enumToName(nm));
+	gScene->addActor(*new_solid);
+
+	Proyectile* rp = new Proyectile(new_solid, 10, true, item);
+
+	rigidParticles.push_back(rp);
 }
 
 void WorldManager::addForce(typeF tipoF)
@@ -125,6 +133,36 @@ void WorldManager::addForce(typeF tipoF)
 
 }
 
+
+void WorldManager::collisionEfect(PxActor* actor1_, PxActor* actor2_)
+{
+	PxActor* actor;
+	RigidParticle* particula1 = nullptr;
+	RigidParticle* particula2 = nullptr;
+
+	auto i = rigidParticles.begin();
+
+	while ((particula1 == nullptr || particula2 == nullptr) && i != rigidParticles.end()) {
+
+		actor = (*i)->getActor();
+
+		if (actor == actor1_) {
+			particula1 = (*i);
+		}
+
+		if (actor == actor2_) {
+			particula2 = (*i);
+		}
+
+		++i;
+
+	}
+
+	particula1->onCollision(Enem, pSys);
+	//particula2->onCollision(Enem, pSys);
+
+}
+
 void WorldManager::update(double t)
 {
 	auto i = rigidParticles.begin();
@@ -135,6 +173,7 @@ void WorldManager::update(double t)
 
 		if (!(*i)->viva()) {
 			RFR->deleteParticleRegistry(*i);
+			gScene->removeActor(*(*i)->getActor());
 			delete (*i);
 			i = rigidParticles.erase(i);
 		}
@@ -176,6 +215,10 @@ void WorldManager::deleteGenerators()
 
 WorldManager::~WorldManager()
 {
+
+	delete NM;
+	delete RFR;
+
 	auto i = rigidParticles.begin();
 
 	while (i != rigidParticles.end()) {

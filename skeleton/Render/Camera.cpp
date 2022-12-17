@@ -94,6 +94,7 @@ void Camera::handleMotion(int x, int y)
 
 	mMouseX = x;
 	mMouseY = y;
+
 }
 
 PxTransform Camera::getTransform() const

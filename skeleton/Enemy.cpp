@@ -1,18 +1,31 @@
 #include "Enemy.h"
 
-Enemy::Enemy(PxRigidDynamic* solid_, double tiempoVida_, RenderItem* item_):RigidParticle(solid_, tiempoVida_, item_) {
+Enemy::Enemy(PxRigidDynamic* solid_, double tiempoVida_, RenderItem *item):RigidParticle(solid_, tiempoVida_, false, item) {
 	
-	PxTransform p(solid_->getGlobalPose().p.x, solid_->getGlobalPose().p.y, solid_->getGlobalPose().p.z);
+    ph = PxTransform(solid_->getGlobalPose().p.x, solid_->getGlobalPose().p.y + 6, solid_->getGlobalPose().p.z);
 
-	head = new RenderItem(CreateShape(PxSphereGeometry(0.5)), solid_, &p, {1.0,0.0,0.0, 1.0});
+	head = new RenderItem(CreateShape(PxSphereGeometry(2)), solid_, &ph, {1.0,0.0,0.0, 1.0});
 
-	p.p.y = solid_->getGlobalPose().p.y - 50;
+	pb = PxTransform(solid_->getGlobalPose().p.x, solid_->getGlobalPose().p.y, solid_->getGlobalPose().p.z);
 
-	body = new RenderItem(CreateShape(PxSphereGeometry(1.5)), solid_, &p, {1.0,0.0,0.0, 1.0});
-
+	body = new RenderItem(CreateShape(PxSphereGeometry(5)), solid_, &pb, {1.0,0.0,0.0, 1.0});
 }
 
 void Enemy::integrate(double t) {
 	RigidParticle::integrate(t);
 
+	PxRigidDynamic* solid_ = getDynamicP();
+
+	ph = PxTransform(solid_->getGlobalPose().p.x, solid_->getGlobalPose().p.y + 6, solid_->getGlobalPose().p.z);
+	pb = PxTransform(solid_->getGlobalPose().p.x, solid_->getGlobalPose().p.y, solid_->getGlobalPose().p.z);
+}
+
+void Enemy::onCollision(names mn, ParticleSys* pSys) {
+
+	setAlive(false);
+}
+
+Enemy::~Enemy() {
+	DeregisterRenderItem(head);
+	DeregisterRenderItem(body);
 }

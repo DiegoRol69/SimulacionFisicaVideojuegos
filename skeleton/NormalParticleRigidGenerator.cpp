@@ -36,7 +36,7 @@ std::list<RigidParticle*> NormalParticleRigidGenerator::generateParticles(PxPhys
 			item = new RenderItem(shape, new_solid, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
 			new_solid->setName(name);
 
-			RigidParticle* rp = new RigidParticle(new_solid, t(gen), item);
+			Enemy * rp = new Enemy(new_solid, t(gen), item);
 
 			particles.push_back(rp);
         }

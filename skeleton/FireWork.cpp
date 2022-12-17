@@ -24,6 +24,9 @@ void FireWork::setFireWork(FireWork *p)
 	properties.shape = pModel.shape;
 	properties.tiempoVida = pModel.tiempoVida;
 	properties.compruebaRango = pModel.compruebaRango;
+	properties.force = pModel.force;
+	properties.inv_mass = pModel.inv_mass;
+	properties.radius = pModel.radius;
 
 	std::uniform_real_distribution<double> color(0, 1);
 
@@ -38,9 +41,15 @@ void FireWork::setFireWork(Vector3 pos, Vector3 v, double damp, Vector3 acel, do
 	properties.vel = v;
 	properties.damping = damp;
 	properties.aceleration = acel;
-	properties.masa = m;
 	properties.shape = shape;
 	properties.tiempoVida = tiempoVida_;
+	properties.force = { 0,0,0 };
+	
+	if (m == 0) properties.masa = 1;
+	else {
+		properties.masa = m;
+		properties.inv_mass = 1 / m;
+	}
 
 	div = nDiv;
 	divTotales = nGen;

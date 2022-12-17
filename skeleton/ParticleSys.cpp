@@ -219,10 +219,8 @@ void ParticleSys::generateFireworkSystem()
 
 	shared_ptr <ParticleGenerator> gen3(new GaussianParticleGen(p, 15, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1, randTypeForce));
 	fw->setFireWork(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -2, 0),
-		440, CreateShape(physx::PxSphereGeometry(0.5)), 1, 10, 5, gen3);
+		440, CreateShape(physx::PxSphereGeometry(0.5)), 0.5, 10, 5, gen3);
 	firework_pool.push_back(fw);
-
-
 }
 
 void ParticleSys::Spring()

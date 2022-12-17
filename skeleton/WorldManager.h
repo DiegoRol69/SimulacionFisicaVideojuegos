@@ -14,6 +14,8 @@
 #include "TipoGenerador.h"
 #include "RigidParticlesNamesManager.h"
 #include "Enemy.h"
+#include "ParticleSys.h"
+#include "Proyectile.h"
 
 using namespace physx;
 using namespace std;
@@ -23,14 +25,16 @@ class WorldManager
 
 public:
 
-	WorldManager(PxScene* gScene_, PxPhysics* gPhysics_);
+	WorldManager(PxScene* gScene_, PxPhysics* gPhysics_, ParticleSys* pSys_);
 	~WorldManager();
 
 	void createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, double density,
-		Vector4 color, names nm, double mass);
+		Vector4 color, names nm);
 	void collisionEfect(PxActor* actor1, PxActor* actor2);
 	void addGen(TipoGen tipoGen, names nm);
 	void addForce(typeF tipoF);
+	void shootProyectile(Vector3 pos, Vector3 vel, PxShape* shape, double density,
+		Vector4 color, names nm);
 	void update(double t);
 	void deleteGenerators();
 
@@ -39,6 +43,7 @@ private:
 	PxScene* gScene;
 	PxPhysics* gPhysics;
 	RenderItem* item;
+	ParticleSys* pSys;
 	list<RigidParticle*> rigidParticles;
 	list<ParticleRigidGenerator*> particleGen;
 
