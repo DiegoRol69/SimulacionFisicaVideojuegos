@@ -22,7 +22,7 @@ void Enemy::integrate(double t) {
 
 void Enemy::onCollision(names nm, ParticleSys* pSys) {
 
-	if(nm == BalaFA)lives--;
+	if(nm == BulletFW)lives--;
 
 	if (lives == 0) {
 		setAlive(false);

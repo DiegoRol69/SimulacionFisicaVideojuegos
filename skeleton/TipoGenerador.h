@@ -1,3 +1,3 @@
 #pragma once
 
-enum TipoGen { Gaussian, Uniform, Circle, Standard};
+enum TipoGen { Gaussian, Uniform, Circle, Standard, SpawnEnem};

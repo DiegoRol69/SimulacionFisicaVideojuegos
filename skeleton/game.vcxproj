@@ -257,6 +257,7 @@
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="CircleParticleGen.cpp" />
+    <ClCompile Include="EnemiesSpawn.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="FireWork.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="CircleParticleGen.h" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="EnemiesSpawn.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FireWork.h" />

@@ -1,3 +1,3 @@
 #pragma once
 
-enum names { SinEfecto, BalaFA, Enem, ult };
+enum names { NonEffect, BulletFW, Enem, Bomb, ult };

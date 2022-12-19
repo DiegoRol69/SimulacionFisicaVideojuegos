@@ -7,6 +7,7 @@
 #include "RigidParticle.h"
 #include "ParticleRigidGenerator.h"
 #include "NormalParticleRigidGenerator.h"
+#include "EnemiesSpawn.h"
 #include "RigidParticleForceRegistry.h"
 #include "RigidForceGenerator.h"
 #include "RigidExplosion.h"
@@ -33,6 +34,7 @@ public:
 	void collisionEfect(PxActor* actor1, PxActor* actor2);
 	void addGen(TipoGen tipoGen, names nm);
 	void addForce(typeF tipoF);
+	void addForceInPos(typeF tipoF, Vector3 pos);
 	void shootProyectile(Vector3 pos, Vector3 vel, PxShape* shape, double density,
 		Vector4 color, names nm);
 	void update(double t);

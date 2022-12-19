@@ -26,16 +26,12 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_, ParticleSys* 
 
 	rigidParticles.push_back(suelo);
 	rigidParticles.push_back(pared);
-	
-	//generar un spawn enemies
-	//hacer que los fireworks/generadores aparezcan donde muere el solido rigido
-
 
 	RFR = new RigidParticleForceRegistry();
 	NM = new RigidParticlesNamesManager();
 
 	contTimeGen = 0;
-	genTime = 1;
+	genTime = 0.5;
 }
 
 void WorldManager::createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, double density,
@@ -60,9 +56,6 @@ void WorldManager::createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, 
 void WorldManager::addGen(TipoGen tipoGen, names nm)
 {
 	ParticleRigidGenerator* generator;
-	std::uniform_real_distribution<double> radius(0.2, 2);
-
-	std::uniform_real_distribution<PxReal> size(0.2, 2);
 
 	PxMaterial* gMaterial = gPhysics->createMaterial(0.2f, 0.2f, 0.3f);
 
@@ -74,9 +67,14 @@ void WorldManager::addGen(TipoGen tipoGen, names nm)
 		break;
 	case Circle:
 		break;
+	case SpawnEnem:
+		generator = new EnemiesSpawn(CreateShape(PxSphereGeometry(5), gMaterial),
+			nm, 5, 1.1, 1, 9);
+		generator->setMeans({ -20,50, 50 }, { 0,-4,0 });
+		break;
 	case Standard:
 		//CreateShape(PxBoxGeometry(size(gen), size(gen), size(gen))
-		generator = new NormalParticleRigidGenerator(CreateShape(PxSphereGeometry(5), gMaterial),
+		generator = new NormalParticleRigidGenerator(nullptr,
 			nm, 1, 0.8, 1, 9);
 		generator->setMeans({ 0,100,0 }, { 0,-4,0 });
 		break;
@@ -96,10 +94,9 @@ void WorldManager::shootProyectile(Vector3 pos, Vector3 vel, PxShape* shape, dou
 	new_solid->attachShape(*shape);
 	PxRigidBodyExt::setMassAndUpdateInertia(*new_solid, density);
 	item = new RenderItem(shape, new_solid, color);
-	new_solid->setName(NM->enumToName(nm));
 	gScene->addActor(*new_solid);
 
-	Proyectile* rp = new Proyectile(new_solid, 10, true, item);
+	Proyectile* rp = new Proyectile(new_solid, 5, true, item);
 	rp->setTypeName(nm);
 
 	rigidParticles.push_back(rp);
@@ -132,6 +129,31 @@ void WorldManager::addForce(typeF tipoF)
 
 }
 
+void WorldManager::addForceInPos(typeF tipoF, Vector3 pos)
+{
+	RigidForceGenerator* FG;
+
+	if (rigidParticles.size() > 0) {
+		switch (tipoF)
+		{
+		case Gravity:
+			break;
+		case Wind:
+			break;
+		case Whirl:
+			break;
+		case Expl:
+			rExplosion = new RigidExplosion(1000000, 200, 100, pos);
+			FG = rExplosion;
+			break;
+		}
+
+		for (auto i : rigidParticles) {
+			if (i->getDynamicP() != nullptr) RFR->addRegistry(FG, i);
+		}
+	}
+}
+
 
 void WorldManager::collisionEfect(PxActor* actor1_, PxActor* actor2_)
 {
@@ -158,6 +180,9 @@ void WorldManager::collisionEfect(PxActor* actor1_, PxActor* actor2_)
 	}
 
 	particula1->onCollision(particula2->getTypeName(), pSys);
+
+	if (particula1->getTypeName() == Bomb) addForceInPos(Expl, particula1->getDynamicP()->getGlobalPose().p);
+
 	particula2->onCollision(particula1->getTypeName(), pSys);
 
 }

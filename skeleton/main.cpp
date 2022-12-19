@@ -35,6 +35,7 @@ WorldManager* world = NULL;
 
 ContactReportCallback gContactReportCallback;
 
+int bulletType = 0;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -109,8 +110,26 @@ void mousePress(int x, int y, const PxTransform& camera) {
 	Camera* camera_ = GetCamera();
 	Vector3 posCamera = camera_->getTransform().p;
 
+	names bullet;
+	PxShape* shape;
+
+	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+
+	double density;
+
+	if (bulletType % 2 == 0) {
+		bullet = BulletFW;
+		shape = CreateShape(physx::PxSphereGeometry(0.5), gMaterial);
+		density = 9;
+	}
+	else {
+		bullet = Bomb;
+		shape = CreateShape(physx::PxSphereGeometry(4), gMaterial);
+		density = 300;
+	}
+
 	world->shootProyectile(posCamera, 80 * camera_->getDir(),
-		CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, BalaFA);
+		shape, density, { 1,0,0, 1 }, bullet);
 
 }
 
@@ -177,12 +196,18 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		world->createRigidDynamic({0,100,0}, {0,0,0},
 			CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, Enem);
 		break;
+	case '7':
+		bulletType++;
+		break;
 	case 'Z':
 		world->deleteGenerators();
 		sysParticle->deleteGenerators();
 		break;
 	case '1':
-		world->addGen(Standard, Enem);
+		world->addGen(SpawnEnem, Enem);
+		break;
+	case '2':
+		world->addGen(Standard, NonEffect);
 		break;
 	}
 }

@@ -11,10 +11,10 @@ public:
 
 		switch (m)
 		{
-		case SinEfecto:
+		case NonEffect:
 			name = "SinEfecto";
 			break;
-		case BalaFA:
+		case BulletFW:
 			name = "BalaFA";
 			break;
 		case Enem:

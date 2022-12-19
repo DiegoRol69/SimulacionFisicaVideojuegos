@@ -119,7 +119,7 @@ void ParticleSys::addGenInPos(TipoGen tipo, Vector3 pos)
 		break;
 	case Circle:
 		p->setParticle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.8, Vector3(0, 0, 0), 10, 
-			CreateShape(physx::PxSphereGeometry(radius)), 3, Vector3(5, 5, 5), Vector3(50, 50, 50), false, true, radius);
+			CreateShape(physx::PxSphereGeometry(radius)), 3, pos, Vector3(8, 8, 8), false, true, radius);
 		gen = new CircleParticleGen(p, 1, 0.8, 20, FunteAgua, ultimo);
 		gen->setMeans(pos, Vector3(0, 0, 0));
 		break;
@@ -256,7 +256,7 @@ void ParticleSys::generateFireworkSystem()
 	firework_pool.push_back(fw);
 }
 
-void ParticleSys::generateFireworkInPos(Vector3 pos)
+void ParticleSys::generateFireworkInPos(Vector3 pos, TipoGen type)
 {
 	Particle* p = new Particle();
 	FireWork* fw = new FireWork();
@@ -264,7 +264,25 @@ void ParticleSys::generateFireworkInPos(Vector3 pos)
 	p->setParticle(Vector3(15, 40, 0), Vector3(0, 10, 0), 0.8, Vector3(0, -9.8, 0), 440,
 		CreateShape(physx::PxSphereGeometry(0.5)), 3, Vector3(15, 40, 0), Vector3(1000, 1000, 1000), false, false, 0.5);
 
-	shared_ptr <ParticleGenerator> gen(new GaussianParticleGen(p, 15, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1, ultimo));
+	ParticleGenerator* pGen;
+
+	switch (type)
+	{
+	case Gaussian:
+		pGen = new GaussianParticleGen(p, 15, Vector3(0.1, 0.1, 0.1), Vector3(10, 10, 10), 0.8, 1, ultimo);
+		break;
+	case Uniform:
+		break;
+	case Circle:
+		pGen = new CircleParticleGen(p, 20, 0.8, 20, FunteChocolate, ultimo);
+		break;
+	case Standard:
+		break;
+	default:
+		break;
+	}
+
+	shared_ptr <ParticleGenerator> gen(pGen);
 	fw->setFireWork(pos, Vector3(0, 0, 0), 0.8, Vector3(0, -2, 0),
 		440, CreateShape(physx::PxSphereGeometry(0.5)), 0.0, 10, 5, gen);
 	
