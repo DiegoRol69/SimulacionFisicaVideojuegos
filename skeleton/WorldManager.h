@@ -11,6 +11,8 @@
 #include "RigidParticleForceRegistry.h"
 #include "RigidForceGenerator.h"
 #include "RigidExplosion.h"
+#include "AtractionForce.h"
+#include "RigidBuoyancyGenerator.h"
 #include "TipoFuerzas.h"
 #include "TipoGenerador.h"
 #include "RigidParticlesNamesManager.h"
@@ -29,8 +31,6 @@ public:
 	WorldManager(PxScene* gScene_, PxPhysics* gPhysics_, ParticleSys* pSys_);
 	~WorldManager();
 
-	void createRigidDynamic(Vector3 pos, Vector3 vel, PxShape* shape, double density,
-		Vector4 color, names nm);
 	void collisionEfect(PxActor* actor1, PxActor* actor2);
 	void addGen(TipoGen tipoGen, names nm);
 	void addForce(typeF tipoF);
@@ -51,8 +51,13 @@ private:
 
 	double genTime;
 	double contTimeGen;
+	double contTimeReset;
+	double resetTime;
+	bool atractionActive = false;
+	int minSize;
 
 	RigidExplosion* rExplosion = nullptr;
+	RigidBuoyancyGenerator* rBuoyancy = nullptr;
 
 	RigidParticleForceRegistry* RFR;
 	RigidParticlesNamesManager* NM;

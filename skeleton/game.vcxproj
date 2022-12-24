@@ -254,6 +254,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnchoredSpringForceGenerator.cpp" />
+    <ClCompile Include="AtractionForce.cpp" />
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="CircleParticleGen.cpp" />
@@ -272,6 +273,7 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="RigidBuoyancyGenerator.cpp" />
     <ClCompile Include="RigidExplosion.cpp" />
     <ClCompile Include="RigidParticle.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
@@ -282,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnchoredSpringForceGenerator.h" />
+    <ClInclude Include="AtractionForce.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="CircleParticleGen.h" />
@@ -304,6 +307,7 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="RigidBuoyancyGenerator.h" />
     <ClInclude Include="RigidExplosion.h" />
     <ClInclude Include="RigidForceGenerator.h" />
     <ClInclude Include="RigidParticle.h" />

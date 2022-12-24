@@ -1,3 +1,3 @@
 #pragma once
 
-enum typeF { Gravity, Wind, Whirl, Expl, ultimo };
+enum typeF { Gravity, Wind, Whirl, Expl, Atraction, ultimo };

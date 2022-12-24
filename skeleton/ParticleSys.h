@@ -53,7 +53,7 @@ public:
 
 	void shootFirework(int type);
 	void generateFireworkSystem();
-	void generateFireworkInPos(Vector3 pos, TipoGen type);
+	void generateFireworkInPos(Vector3 pos, TipoGen type, int n);
 	void Spring();
 	void Anchored();
 	void Slinky();

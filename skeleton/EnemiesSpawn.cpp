@@ -1,6 +1,6 @@
 #include "EnemiesSpawn.h"
 
-EnemiesSpawn::EnemiesSpawn(PxShape* shape_, names name_, int n,
+EnemiesSpawn::EnemiesSpawn(PxShape* shape_, double r_, names name_, int n,
 	double _generation_probability_, double dev_t_, double mean_t_)
 {
 	shape = shape_;
@@ -9,6 +9,7 @@ EnemiesSpawn::EnemiesSpawn(PxShape* shape_, names name_, int n,
 	dev_t = dev_t_;
 	num_particles = n;
 	_generation_probability = _generation_probability_;
+	r = r_;
 }
 
 std::list<RigidParticle*> EnemiesSpawn::generateParticles(PxPhysics* gPhysics)
@@ -22,15 +23,18 @@ std::list<RigidParticle*> EnemiesSpawn::generateParticles(PxPhysics* gPhysics)
 	setDistribution();
 
 	int x = mean_pos.x;
+	Vector3 pos;
 
 	for (int i = 0; i < num_particles; i++) {
 		if (generationDistr(gen) < _generation_probability) {
 
 			PxRigidDynamic* new_solid;
 
-			mean_pos.x = x + (i * 10);
+			pos = mean_pos;
 
-			new_solid = gPhysics->createRigidDynamic(PxTransform(mean_pos));
+			pos.x = x + (i * 20);
+
+			new_solid = gPhysics->createRigidDynamic(PxTransform(pos));
 			new_solid->setLinearVelocity(mean_vel);
 			new_solid->setAngularVelocity({ 0,0,0 });
 			new_solid->attachShape(*shape);
@@ -38,7 +42,7 @@ std::list<RigidParticle*> EnemiesSpawn::generateParticles(PxPhysics* gPhysics)
 
 			item = new RenderItem(shape, new_solid, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
 
-			Enemy* rp = new Enemy(new_solid, 0, item);
+			Enemy* rp = new Enemy(new_solid, r, 1, item);
 			rp->setTypeName(name);
 
 			particles.push_back(rp);

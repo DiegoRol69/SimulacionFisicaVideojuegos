@@ -191,10 +191,8 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		sysParticle->Buoyancy();
 		break;
 	//PARTICULAS FISICAS
-	case 'R':
-		//posCamera, 80 * camera_->getDir()
-		world->createRigidDynamic({0,100,0}, {0,0,0},
-			CreateShape(physx::PxSphereGeometry(2)), 7, { 1,0,0, 1 }, Enem);
+	case 'J':
+		world->addForce(Atraction);
 		break;
 	case '7':
 		bulletType++;

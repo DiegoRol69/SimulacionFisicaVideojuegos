@@ -22,6 +22,7 @@ public:
 	virtual void integrate(double t);
 	bool viva();
 	void setAlive(bool state);
+	void activeDestroyable();
 	virtual void onCollision(names mn, ParticleSys *pSys) {};
 
 	PxActor* getActor();

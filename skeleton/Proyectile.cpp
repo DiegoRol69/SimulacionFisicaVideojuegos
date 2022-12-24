@@ -19,11 +19,10 @@ void Proyectile::onCollision(names mn, ParticleSys* pSys) {
 	switch (getTypeName())
 	{
 	case BulletFW:
-		pSys->generateFireworkInPos(pos, Gaussian);
+		pSys->generateFireworkInPos(pos, Gaussian, 15);
 		break;
 	case Bomb:
-		//wMng->addForceInPos(Expl, pos);
-		pSys->generateFireworkInPos(pos, Circle);
+		pSys->generateFireworkInPos(pos, Circle, 20);
 		break;
 	default:
 		break;

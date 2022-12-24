@@ -35,6 +35,11 @@ void RigidParticle::setAlive(bool state)
 	alive = state;
 }
 
+void RigidParticle::activeDestroyable()
+{
+	destroyable = true;
+}
+
 PxActor* RigidParticle::getActor()
 {
 	if (solidDynamic != nullptr) return solidDynamic;

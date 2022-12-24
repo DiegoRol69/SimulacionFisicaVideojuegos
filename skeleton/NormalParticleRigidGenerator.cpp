@@ -17,7 +17,7 @@ std::list<RigidParticle*> NormalParticleRigidGenerator::generateParticles(PxPhys
     std::uniform_real_distribution<double> density(1, 600);
 	std::uniform_real_distribution<double> color(0, 1);
 	std::uniform_real_distribution<PxReal> size(0.2, 2);
-	std::uniform_real_distribution<PxReal> mat(0.1, 3);
+	std::uniform_real_distribution<PxReal> mat(0.1, 0.6);
 	std::normal_distribution<> t(mean_t, dev_t);
 
 	PxMaterial* gMaterial;
@@ -42,7 +42,7 @@ std::list<RigidParticle*> NormalParticleRigidGenerator::generateParticles(PxPhys
 
 			item = new RenderItem(shape, new_solid, { float(color(gen)), float(color(gen)), float(color(gen)), 1 });
 
-			RigidParticle * rp = new RigidParticle(new_solid, t(gen), true, item);
+			RigidParticle * rp = new RigidParticle(new_solid, t(gen), false, item);
 			rp->setTypeName(name);
 
 			particles.push_back(rp);

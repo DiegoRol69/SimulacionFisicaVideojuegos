@@ -17,7 +17,6 @@ public:
 protected:
 	float k1, k2;
 	double const cD = 0.5;
-	double const pi = 3.1415926535;
 	double const airDensity = 1.20;
 	Vector3 windF;
 };
