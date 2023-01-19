@@ -72,7 +72,7 @@ WorldManager::WorldManager(PxScene* gScene_, PxPhysics* gPhysics_, ParticleSys* 
 	contTimeGen = 0;
 	contTimeReset = 0;
 	resetTime = 5;
-	genTime = 0.5;
+	genTime = 0.75;
 
 	minSize = 6;
 }
@@ -135,7 +135,7 @@ void WorldManager::addForce(typeF tipoF)
 		{
 		case Atraction:
 			atractionActive = true;
-			FG = new AtractionForce(80, Vector3(0,10,0));
+			FG = new AtractionForce(100, Vector3(0,10,0));
 			break;
 		case Expl:
 			rExplosion = new RigidExplosion(1000000, 200, 100, { 0, 0, 0 });
